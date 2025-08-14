@@ -5,49 +5,48 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>刮刮卡</title>
     <link rel="stylesheet" href="/styles.css">
-</head>
-<body>
-    <a href="/" class="back-button">← 返回</a>
-    <div class="game-container">
-        <h1>🎟️ 刮刮卡</h1>
-        <p>玩家：<%= username %></p>
-        <p style="color: #666; margin-bottom: 20px;">使用鼠标或手指刮开卡片，寻找匹配的中奖号码！</p>
-        
-        <div class="scratch-container" id="scratchContainer">
-            <div id="scratchContent"></div>
-            <canvas id="scratchCanvas"></canvas>
-        </div>
-        
-        <div class="scratch-controls">
-            <button onclick="startScratch()">获取新卡片</button>
-            <button onclick="verifyWin()">验证中奖</button>
-        </div>
-        
-        <div id="result" style="margin-top: 20px; font-size: 1.2rem; min-height: 40px;"></div>
-    </div>
-
     <style>
-        .scratch-container {
+        body {
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
+                        radial-gradient(circle at center, #667eea 0%, #764ba2 100%);
+            color: #fff;
+        }
+        
+        .board {
+            max-width: 750px;
+            margin: auto;
+            background: rgba(255, 255, 255, 0.08);
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 16px;
+            padding: 1.5rem;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+        
+        .labels {
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+        
+        #scratchContainer {
             position: relative;
             width: 100%;
-            max-width: 600px;
-            margin: 20px auto;
-            aspect-ratio: 5/4;
-            background: #f8f8f8;
+            aspect-ratio: 5 / 4;
+            background: #eee;
             border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15);
-            border: 2px solid #e0e0e0;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.4);
         }
         
         #scratchCanvas {
             position: absolute;
             top: 0;
             left: 0;
+            z-index: 5;
             width: 100%;
             height: 100%;
-            cursor: crosshair;
-            z-index: 2;
+            cursor: pointer;
         }
         
         #scratchContent {
@@ -56,11 +55,13 @@
             left: 0;
             width: 100%;
             height: 100%;
+            z-index: 1;
             display: grid;
             grid-template-columns: repeat(5, 1fr);
             grid-template-rows: repeat(5, 1fr);
-            z-index: 1;
-            background: white;
+            font-weight: bold;
+            font-size: 1rem;
+            color: #000;
         }
         
         .grid-item {
@@ -68,98 +69,68 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            border: 1px solid #ddd;
-            background: white;
-            font-size: 1rem;
+            border: 1px solid rgba(0,0,0,0.1);
+            background: #fff;
+        }
+        
+        .scratch-ui {
+            margin-top: 1.5rem;
+            position: relative;
+            z-index: 10;
+        }
+        
+        button {
+            padding: 0.8rem 1.5rem;
+            background: #ffcc00;
+            color: #000;
             font-weight: bold;
-            color: #333;
-            text-align: center;
-            transition: all 0.3s;
-        }
-        
-        .grid-item.winning {
-            background: linear-gradient(45deg, #fff3cd, #ffeaa7);
-            color: #d63031;
-            border-color: #fdcb6e;
-            font-size: 1.1rem;
-        }
-        
-        .scratch-controls {
-            margin-top: 30px;
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-        
-        .scratch-controls button {
-            background: linear-gradient(45deg, #6c5ce7, #a29bfe);
-            color: white;
             border: none;
-            padding: 12px 24px;
-            border-radius: 25px;
-            font-size: 16px;
+            border-radius: 8px;
             cursor: pointer;
+            margin: 0.5rem;
             transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(108, 92, 231, 0.3);
         }
         
-        .scratch-controls button:hover:not(:disabled) {
+        button:hover {
+            background: #ffd700;
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(108, 92, 231, 0.4);
         }
         
-        .scratch-controls button:disabled {
-            background: #ccc;
+        button:disabled {
+            background: #95a5a6;
             cursor: not-allowed;
             transform: none;
-            box-shadow: none;
         }
         
-        .result-win {
-            color: #00b894;
-            font-weight: bold;
-            animation: pulse 0.8s ease-in-out;
-            text-align: center;
-        }
-        
-        .result-lose {
-            color: #636e72;
-            text-align: center;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-        
-        .scratch-instructions {
-            background: #f8f9fa;
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 20px;
-            border-left: 4px solid #6c5ce7;
-        }
-        
-        .scratch-instructions h3 {
-            margin: 0 0 10px 0;
-            color: #2d3436;
-            font-size: 1.1rem;
-        }
-        
-        .scratch-instructions p {
-            margin: 5px 0;
-            color: #636e72;
-            font-size: 0.9rem;
+        #verifyResult {
+            margin-top: 1rem;
         }
     </style>
+</head>
+<body>
+    <a href="/" class="back-button">← 返回</a>
+    <div class="game-container">
+        <div class="board">
+            <h2>🎯 刮刮卡</h2>
+            <p>玩家：<%= username %></p>
+            <div class="labels">刮开格子，找到匹配的中奖号码！</div>
+            <div id="scratchContainer">
+                <div id="scratchContent"></div>
+                <canvas id="scratchCanvas"></canvas>
+            </div>
+
+            <div class="scratch-ui">
+                <button onclick="startScratch()">开始刮奖</button>
+                <button onclick="verifyWin()">🎯 验证结果</button>
+                <p id="verifyResult" style="font-weight: bold; font-size: 1.2rem;"></p>
+            </div>
+        </div>
+    </div>
 
     <script>
         const username = "<%= username %>";
-        let hasVerified = true;
-        let currentWinningNumbers = [];
-        let currentSlots = [];
         
+        // Polyfill for crypto.randomUUID
         if (!crypto.randomUUID) {
             crypto.randomUUID = function () {
                 return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
@@ -168,58 +139,41 @@
             };
         }
         
-        function createCard(num, isWinning, prize) {
+        let hasVerified = true;
+        
+        function createCard(num, prize) {
             const cell = document.createElement('div');
-            cell.className = 'grid-item' + (isWinning ? ' winning' : '');
-            
-            if (isWinning) {
-                cell.innerHTML = `<div style="font-size: 1.2rem; margin-bottom: 5px;">${num}</div><div style="font-size: 0.8rem; color: #e17055;">中奖号</div>`;
-            } else {
-                cell.innerHTML = `<div style="margin-bottom: 5px;">${num}</div><div style="font-size: 0.8rem; color: #74b9ff;">${prize || ''}</div>`;
-            }
-            
+            cell.className = 'grid-item';
+            cell.innerHTML = `<div>${num}</div><div>${prize || ''}</div>`;
             return cell;
         }
         
         async function startScratch() {
             if (!hasVerified) {
-                alert('请先验证当前结果再获取新卡片！');
+                alert('请先验证当前结果，再开始下一轮刮奖！');
                 return;
             }
-            
             hasVerified = false;
-            document.getElementById('result').innerHTML = '<div style="color: #0984e3; text-align: center;">正在生成卡片...</div>';
             
-            const buttons = document.querySelectorAll('.scratch-controls button');
-            buttons.forEach(btn => btn.disabled = true);
-            
-            // Setup canvas first to prevent number flash
+            // 初始化Canvas遮罩层 - 防止数字闪现
             const canvas = document.getElementById('scratchCanvas');
             const ctx = canvas.getContext('2d');
             canvas.width = canvas.offsetWidth;
             canvas.height = canvas.offsetHeight;
             
-            // Create scratch surface
-            const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-            gradient.addColorStop(0, '#silver');
-            gradient.addColorStop(0.5, '#darkgray');
-            gradient.addColorStop(1, '#gray');
-            
-            ctx.fillStyle = gradient;
+            // 创建银色遮罩层
+            ctx.fillStyle = '#c0c0c0';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             
-            // Add scratch text
-            ctx.fillStyle = '#fff';
-            ctx.font = 'bold 24px Arial';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillText('刮开试试手气', canvas.width / 2, canvas.height / 2 - 20);
-            ctx.font = '16px Arial';
-            ctx.fillText('🎯 寻找匹配号码', canvas.width / 2, canvas.height / 2 + 20);
+            // 添加纹理效果
+            for (let i = 0; i < 50; i++) {
+                ctx.fillStyle = `rgba(${160 + Math.random() * 80}, ${160 + Math.random() * 80}, ${160 + Math.random() * 80}, 0.3)`;
+                ctx.fillRect(Math.random() * canvas.width, Math.random() * canvas.height, 5, 5);
+            }
             
             ctx.globalCompositeOperation = 'destination-out';
             
-            // Fetch data
+            // 请求数据
             const timestamp = Math.floor(Date.now() / 1000);
             const nonce = crypto.randomUUID();
             
@@ -232,138 +186,124 @@
                 
                 const data = await res.json();
                 if (!data.success) {
-                    throw new Error(data.message || '获取卡片失败');
+                    alert('❌ ' + data.message);
+                    return;
                 }
                 
-                currentWinningNumbers = data.winningNumbers;
-                currentSlots = data.slots;
+                const all = [
+                    ...data.winningNumbers.map(n => ({ num: n, prize: '中奖号码' })),
+                    ...data.slots
+                ];
                 
-                // Display grid
                 const container = document.getElementById('scratchContent');
                 container.innerHTML = '';
+                all.forEach(({ num, prize }) => container.appendChild(createCard(num, prize)));
                 
-                // First row - winning numbers
-                currentWinningNumbers.forEach(num => {
-                    container.appendChild(createCard(num, true));
-                });
+                // 刮刮逻辑 - 完全按照原版
+                let isDrawing = false, lastX = null, lastY = null;
                 
-                // Other rows - player slots
-                currentSlots.forEach(slot => {
-                    container.appendChild(createCard(slot.num, false, slot.prize));
-                });
+                // 鼠标事件
+                canvas.onmousedown = (e) => {
+                    isDrawing = true;
+                    const rect = canvas.getBoundingClientRect();
+                    lastX = e.clientX - rect.left;
+                    lastY = e.clientY - rect.top;
+                    drawAt(lastX, lastY);
+                };
                 
-                // Setup scratch events
-                setupScratchEvents(canvas, ctx);
+                canvas.onmouseup = canvas.onmouseleave = () => {
+                    isDrawing = false;
+                    lastX = lastY = null;
+                };
                 
-                document.getElementById('result').innerHTML = '<div style="color: #00b894; text-align: center;">卡片已生成！开始刮奖吧！</div>';
+                canvas.onmousemove = e => {
+                    if (!isDrawing) return;
+                    const rect = canvas.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    drawAt(x, y);
+                };
+                
+                // 触摸事件（移动端）
+                canvas.ontouchstart = e => {
+                    isDrawing = true;
+                    e.preventDefault();
+                    const rect = canvas.getBoundingClientRect();
+                    const touch = e.touches[0];
+                    lastX = touch.clientX - rect.left;
+                    lastY = touch.clientY - rect.top;
+                    drawAt(lastX, lastY);
+                };
+                
+                canvas.ontouchmove = e => {
+                    if (!isDrawing) return;
+                    e.preventDefault();
+                    const rect = canvas.getBoundingClientRect();
+                    const touch = e.touches[0];
+                    const x = touch.clientX - rect.left;
+                    const y = touch.clientY - rect.top;
+                    drawAt(x, y);
+                };
+                
+                canvas.ontouchend = () => {
+                    isDrawing = false;
+                    lastX = lastY = null;
+                };
+                
+                // 绘制函数
+                function drawAt(x, y) {
+                    if (lastX !== null && lastY !== null) {
+                        const dx = x - lastX;
+                        const dy = y - lastY;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        const steps = Math.ceil(dist / 4);
+                        for (let i = 0; i <= steps; i++) {
+                            const lerpX = lastX + (dx * i / steps);
+                            const lerpY = lastY + (dy * i / steps);
+                            ctx.beginPath();
+                            ctx.arc(lerpX, lerpY, 20, 0, Math.PI * 2);
+                            ctx.fill();
+                        }
+                    }
+                    lastX = x;
+                    lastY = y;
+                }
+                
+                document.getElementById('verifyResult').textContent = '';
                 
             } catch (error) {
-                alert('获取卡片失败：' + (error.message || '网络错误'));
-                hasVerified = true;
-                document.getElementById('result').innerHTML = '';
-            } finally {
-                buttons.forEach(btn => btn.disabled = false);
+                alert('网络错误，请重试');
+                console.error('Error:', error);
             }
-        }
-        
-        function setupScratchEvents(canvas, ctx) {
-            let isDrawing = false;
-            
-            function getCoords(e) {
-                const rect = canvas.getBoundingClientRect();
-                return {
-                    x: (e.clientX || e.touches[0].clientX) - rect.left,
-                    y: (e.clientY || e.touches[0].clientY) - rect.top
-                };
-            }
-            
-            function scratch(x, y) {
-                ctx.beginPath();
-                ctx.arc(x, y, 25, 0, Math.PI * 2);
-                ctx.fill();
-            }
-            
-            // Mouse events
-            canvas.onmousedown = (e) => { 
-                isDrawing = true; 
-                const coords = getCoords(e);
-                scratch(coords.x, coords.y);
-            };
-            canvas.onmouseup = canvas.onmouseleave = () => { isDrawing = false; };
-            canvas.onmousemove = (e) => {
-                if (!isDrawing) return;
-                const coords = getCoords(e);
-                scratch(coords.x, coords.y);
-            };
-            
-            // Touch events
-            canvas.ontouchstart = (e) => {
-                e.preventDefault();
-                isDrawing = true;
-                const coords = getCoords(e);
-                scratch(coords.x, coords.y);
-            };
-            
-            canvas.ontouchmove = (e) => {
-                e.preventDefault();
-                if (!isDrawing) return;
-                const coords = getCoords(e);
-                scratch(coords.x, coords.y);
-            };
-            
-            canvas.ontouchend = (e) => { 
-                e.preventDefault();
-                isDrawing = false; 
-            };
         }
         
         function verifyWin() {
-            if (hasVerified) {
-                document.getElementById('result').innerHTML = '<div class="result-lose">请先获取卡片！</div>';
-                return;
+            const grid = Array.from(document.querySelectorAll('#scratchContent .grid-item'));
+            const winNums = grid.slice(0, 5).map(cell => parseInt(cell.children[0].textContent));
+            const userSlots = grid.slice(5);
+            
+            const matched = [];
+            
+            userSlots.forEach(cell => {
+                const num = parseInt(cell.children[0].textContent);
+                const prize = cell.children[1].textContent;
+                if (winNums.includes(num)) {
+                    matched.push({ num, prize });
+                }
+            });
+            
+            const result = document.getElementById('verifyResult');
+            if (matched.length > 0) {
+                const msg = matched.map(m => `号码 ${m.num}: ${m.prize}`).join(', ');
+                result.textContent = `🎉 恭喜，你中了 ${matched.length} 个奖！${msg}`;
+                result.style.color = '#00ff88';
+            } else {
+                result.textContent = '😢 很遗憾，这次没有中奖。再试一次！';
+                result.style.color = '#ff5555';
             }
             
             hasVerified = true;
-            
-            // Find matching numbers with prizes
-            const wins = currentSlots.filter(slot => 
-                currentWinningNumbers.includes(slot.num) && slot.prize
-            );
-            
-            const resultDiv = document.getElementById('result');
-            
-            if (wins.length > 0) {
-                const prizes = wins.map(w => w.prize).join(', ');
-                resultDiv.innerHTML = `
-                    <div class="result-win">
-                        🎉 恭喜中奖！<br>
-                        匹配号码：${wins.map(w => w.num).join(', ')}<br>
-                        获得奖品：${prizes}
-                    </div>
-                `;
-            } else {
-                // Check if there are matching numbers but no prizes
-                const matchingNumbers = currentSlots.filter(slot => 
-                    currentWinningNumbers.includes(slot.num)
-                );
-                
-                if (matchingNumbers.length > 0) {
-                    resultDiv.innerHTML = `
-                        <div class="result-lose">
-                            找到匹配号码：${matchingNumbers.map(w => w.num).join(', ')}<br>
-                            但这次没有奖品，再试一次吧！
-                        </div>
-                    `;
-                } else {
-                    resultDiv.innerHTML = '<div class="result-lose">本次未中奖，再试一次吧！</div>';
-                }
-            }
         }
-        
-        // Initialize
-        window.addEventListener('load', () => {
-            document.getElementById('result').innerHTML = '<div style="color: #636e72; text-align: center;">点击"获取新卡片"开始游戏</div>';
-        });
     </script>
 </body>
 </html>

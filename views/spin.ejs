@@ -5,285 +5,168 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>幸运转盘</title>
     <link rel="stylesheet" href="/styles.css">
-</head>
-<body>
-    <a href="/" class="back-button">← 返回</a>
-    <div class="game-container">
-        <h1>🎡 幸运转盘</h1>
-        <p>玩家：<%= username %></p>
-        
-        <div class="wheel-container">
-            <div class="wheel-pointer"></div>
-            <canvas id="wheelCanvas" width="400" height="400"></canvas>
-        </div>
-        
-        <button id="spinButton" onclick="spin()">开始旋转</button>
-        
-        <div id="result" style="margin-top: 30px; font-size: 1.2rem; min-height: 50px; text-align: center;"></div>
-    </div>
-
     <style>
-        .wheel-container {
+        #container {
             position: relative;
-            margin: 30px auto;
-            width: 400px;
-            height: 400px;
+            display: inline-block;
+            margin: 20px 0;
         }
-        
-        #wheelCanvas {
-            background: white;
-            border-radius: 50%;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
-            border: 5px solid #f8f9fa;
-        }
-        
-        .wheel-pointer {
-            position: absolute;
-            top: -25px;
-            left: 50%;
-            transform: translateX(-50%);
+        #pointer {
             width: 0;
             height: 0;
-            border-left: 25px solid transparent;
-            border-right: 25px solid transparent;
-            border-top: 50px solid #2d3436;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-top: 30px solid #333;
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
             z-index: 10;
-            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
         }
-        
+        #button-area {
+            margin-top: 20px;
+        }
         #spinButton {
-            background: linear-gradient(45deg, #fd79a8, #e84393);
+            padding: 15px 30px;
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
             color: white;
             border: none;
-            padding: 15px 40px;
-            font-size: 18px;
+            border-radius: 25px;
+            font-size: 16px;
             font-weight: bold;
-            border-radius: 30px;
             cursor: pointer;
             transition: all 0.3s;
-            box-shadow: 0 6px 20px rgba(232, 67, 147, 0.3);
-            margin: 20px;
         }
-        
         #spinButton:hover:not(:disabled) {
-            background: linear-gradient(45deg, #e84393, #fd79a8);
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(232, 67, 147, 0.4);
+            background: linear-gradient(45deg, #ee5a24, #ff6b6b);
+            transform: translateY(-2px);
         }
-        
         #spinButton:disabled {
             background: #95a5a6;
             cursor: not-allowed;
             transform: none;
-            box-shadow: 0 4px 10px rgba(149, 165, 166, 0.2);
-        }
-        
-        .result-win {
-            color: #00b894;
-            font-weight: bold;
-            animation: celebration 1s ease-in-out;
-            background: linear-gradient(45deg, #00b894, #55efc4);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        .result-processing {
-            color: #0984e3;
-            font-weight: bold;
-            animation: pulse 1.5s infinite;
-        }
-        
-        @keyframes celebration {
-            0%, 100% { transform: scale(1) rotate(0deg); }
-            25% { transform: scale(1.1) rotate(-2deg); }
-            75% { transform: scale(1.1) rotate(2deg); }
-        }
-        
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.6; }
-        }
-        
-        .wheel-prizes {
-            margin-top: 20px;
-            background: #f8f9fa;
-            border-radius: 12px;
-            padding: 15px;
-            border: 2px solid #e9ecef;
-        }
-        
-        .wheel-prizes h3 {
-            margin: 0 0 15px 0;
-            color: #2d3436;
-            font-size: 1.1rem;
-            text-align: center;
-        }
-        
-        .prize-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 8px;
-            font-size: 0.9rem;
-        }
-        
-        .prize-item {
-            background: white;
-            padding: 8px;
-            border-radius: 6px;
-            text-align: center;
-            border: 1px solid #dee2e6;
-            color: #495057;
         }
     </style>
+</head>
+<body>
+    <a href="/" class="back-button">← 返回</a>
+    <div class="game-container">
+        <h1>🎰 幸运转盘</h1>
+        <p>玩家：<%= username %></p>
+        <p style="color: #666;">转动转盘，看看你的运气如何！</p>
+        
+        <div id="container">
+            <div id="pointer"></div>
+            <canvas id="wheel" width="300" height="300"></canvas>
+        </div>
+        
+        <div id="button-area">
+            <button id="spinButton" onclick="spin()">🎰 开始转动</button>
+        </div>
+        
+        <div id="result" style="margin-top: 20px; font-size: 1.2rem; min-height: 40px;"></div>
+    </div>
 
     <script>
         const username = "<%= username %>";
-        const prizes = ["-5元优惠", "免费一局", "再来一次", "9折优惠", "当天免费", "谢谢参与"];
-        const colors = ["#e17055", "#00b894", "#0984e3", "#fdcb6e", "#a29bfe", "#fd79a8"];
-        const canvas = document.getElementById("wheelCanvas");
+        
+        // Prize pool and colors - 完全按照原版
+        const prizes = ["-$5 折扣", "免费游戏", "再试一次", "10% 折扣", "今日免费", "下次好运"];
+        const colors = ["#f44336", "#4caf50", "#2196f3", "#ff9800", "#9c27b0", "#607d8b"];
+        const canvas = document.getElementById("wheel");
         const ctx = canvas.getContext("2d");
         
         function drawWheel() {
-            const centerX = 200;
-            const centerY = 200;
-            const radius = 180;
-            const arc = (2 * Math.PI) / prizes.length;
-            
-            ctx.clearRect(0, 0, 400, 400);
-            
-            // Draw sections
+            const arc = 2 * Math.PI / prizes.length;
             for (let i = 0; i < prizes.length; i++) {
-                const startAngle = i * arc;
-                const endAngle = (i + 1) * arc;
-                
-                // Draw section
+                const start = i * arc;
                 ctx.beginPath();
-                ctx.moveTo(centerX, centerY);
-                ctx.arc(centerX, centerY, radius, startAngle, endAngle);
-                ctx.closePath();
+                ctx.moveTo(150, 150);
                 ctx.fillStyle = colors[i];
+                ctx.arc(150, 150, 140, start, start + arc);
                 ctx.fill();
-                
-                // Draw border
-                ctx.strokeStyle = "#fff";
-                ctx.lineWidth = 4;
-                ctx.stroke();
-                
-                // Draw text
                 ctx.save();
-                ctx.translate(centerX, centerY);
-                ctx.rotate(startAngle + arc / 2);
-                ctx.textAlign = "right";
+                ctx.translate(150, 150);
+                ctx.rotate(start + arc / 2);
                 ctx.fillStyle = "#fff";
-                ctx.font = "bold 16px Arial";
-                ctx.shadowColor = 'rgba(0,0,0,0.3)';
-                ctx.shadowOffsetX = 1;
-                ctx.shadowOffsetY = 1;
-                ctx.shadowBlur = 2;
-                ctx.fillText(prizes[i], radius - 25, 5);
+                ctx.font = "14px Arial";
+                ctx.textAlign = "right";
+                ctx.fillText(prizes[i], 130, 5);
                 ctx.restore();
             }
-            
-            // Draw center circle
-            ctx.beginPath();
-            ctx.arc(centerX, centerY, 35, 0, 2 * Math.PI);
-            ctx.fillStyle = "#2d3436";
-            ctx.fill();
-            ctx.strokeStyle = "#fff";
-            ctx.lineWidth = 4;
-            ctx.stroke();
-            
-            // Draw center decoration
-            ctx.beginPath();
-            ctx.arc(centerX, centerY, 20, 0, 2 * Math.PI);
-            ctx.fillStyle = "#ddd";
-            ctx.fill();
         }
         
-        // Initialize wheel
         drawWheel();
         
+        function generateNonce(length = 16) {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            return Array.from({ length }, () => chars[Math.floor(Math.random() * chars.length)]).join('');
+        }
+        
         async function spin() {
-            const button = document.getElementById("spinButton");
-            const resultDiv = document.getElementById("result");
+            const button = document.getElementById('spinButton');
+            const resultDiv = document.getElementById('result');
             
+            // 防止重复点击
             button.disabled = true;
-            resultDiv.innerHTML = '<div class="result-processing">🎡 转盘旋转中...</div>';
+            resultDiv.textContent = "转动中，请稍候...";
             
             const timestamp = Math.floor(Date.now() / 1000);
-            const nonce = crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).substring(2);
+            const nonce = generateNonce();
             
             try {
-                const response = await fetch("/api/spin", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
+                const response = await fetch('/api/spin', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ username, timestamp, nonce })
                 });
                 
                 const data = await response.json();
                 
                 if (!data.success) {
-                    resultDiv.innerHTML = `<div style="color: #d63031;">错误：${data.message}</div>`;
+                    resultDiv.textContent = "❌ " + data.message;
                     button.disabled = false;
                     return;
                 }
                 
-                // Animate wheel rotation
-                const totalRotation = 360 * 6 + (270 - data.angle); // 6 full rotations + final position
-                const duration = 4000; // 4 seconds
-                const startTime = performance.now();
+                // 完全按照原版的动画逻辑
+                const finalAngle = 360 * 5 + (270 - data.angle);
+                const duration = 4000;
+                const start = performance.now();
                 
-                function animate(currentTime) {
-                    const elapsed = currentTime - startTime;
-                    const progress = Math.min(elapsed / duration, 1);
+                function animate(now) {
+                    const t = Math.min((now - start) / duration, 1);
+                    const eased = 1 - Math.pow(1 - t, 3); // 原版缓动函数
+                    const angle = finalAngle * eased;
                     
-                    // Easing function for natural deceleration
-                    const easeOut = 1 - Math.pow(1 - progress, 4);
-                    const rotation = totalRotation * easeOut;
-                    
+                    ctx.clearRect(0, 0, 300, 300);
                     ctx.save();
-                    ctx.translate(200, 200);
-                    ctx.rotate((rotation * Math.PI) / 180);
-                    ctx.translate(-200, -200);
+                    ctx.translate(150, 150);
+                    ctx.rotate((angle * Math.PI) / 180);
+                    ctx.translate(-150, -150);
                     drawWheel();
                     ctx.restore();
                     
-                    if (progress < 1) {
+                    if (t < 1) {
                         requestAnimationFrame(animate);
                     } else {
-                        // Show final result
-                        setTimeout(() => {
-                            resultDiv.innerHTML = `
-                                <div class="result-win">
-                                    🎉 恭喜获得：${data.prize} 🎉
-                                </div>
-                            `;
-                            button.disabled = false;
-                        }, 500);
+                        resultDiv.innerHTML = `
+                            <div style="color: #28a745; font-weight: bold; text-align: center;">
+                                🎉 恭喜！你获得了：${data.prize}
+                            </div>
+                        `;
+                        button.disabled = false;
                     }
                 }
                 
                 requestAnimationFrame(animate);
                 
             } catch (error) {
-                resultDiv.innerHTML = '<div style="color: #d63031;">网络错误，请重试</div>';
+                resultDiv.textContent = "❌ 网络错误，请重试";
                 button.disabled = false;
                 console.error('Error:', error);
             }
         }
     </script>
-    
-    <div class="wheel-prizes">
-        <h3>🎁 奖品一览</h3>
-        <div class="prize-list">
-            <div class="prize-item">-5元优惠</div>
-            <div class="prize-item">免费一局</div>
-            <div class="prize-item">再来一次</div>
-            <div class="prize-item">9折优惠</div>
-            <div class="prize-item">当天免费</div>
-            <div class="prize-item">谢谢参与</div>
-        </div>
-    </div>
 </body>
 </html>

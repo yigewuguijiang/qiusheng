@@ -134,35 +134,25 @@ class GameLogic {
         }
     };
 
-    // Spin 转盘游戏逻辑
+    // Spin 转盘游戏逻辑 - 完全按照原版
     static spin = {
-        prizes: [
-            { name: "-5元优惠", probability: 0.15, angle: 0 },
-            { name: "免费一局", probability: 0.20, angle: 60 },
-            { name: "再来一次", probability: 0.25, angle: 120 },
-            { name: "9折优惠", probability: 0.10, angle: 180 },
-            { name: "当天免费", probability: 0.05, angle: 240 },
-            { name: "谢谢参与", probability: 0.25, angle: 300 }
-        ],
+        prizes: ['-$5 折扣', '免费游戏', '再试一次', '10% 折扣', '今日免费', '下次好运'],
 
         spin() {
-            const rand = Math.random();
-            let cumulativeProbability = 0;
+            // 按照原版逻辑
+            const prizeIndex = GameLogic.randomInt(0, this.prizes.length - 1);
+            const prize = this.prizes[prizeIndex];
             
-            for (const prize of this.prizes) {
-                cumulativeProbability += prize.probability;
-                if (rand <= cumulativeProbability) {
-                    return {
-                        prize: prize.name,
-                        angle: prize.angle + GameLogic.randomInt(-25, 25) // 添加随机偏差
-                    };
-                }
-            }
+            // 计算角度 - 完全按照原版
+            const segmentAngle = 360 / this.prizes.length; // 60度每段
+            const centerAngle = prizeIndex * segmentAngle + segmentAngle / 2;
+            const randomOffset = GameLogic.randomInt(-15, 15); // ±15度随机偏移
+            const angle = (centerAngle + randomOffset) % 360;
             
-            // 默认返回谢谢参与
             return {
-                prize: "谢谢参与",
-                angle: 300 + GameLogic.randomInt(-25, 25)
+                prize,
+                angle,
+                success: true
             };
         }
     };

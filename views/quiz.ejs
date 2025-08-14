@@ -14,7 +14,7 @@
         <p style="color: #666;">30秒内回答15道题，看看你能得多少分！</p>
         
         <div id="user-section">
-            <button onclick="startQuiz()">开始答题</button>
+            <button onclick="startQuiz()">🎮 准备开始</button>
         </div>
         
         <div id="quiz" style="display:none">
@@ -28,6 +28,88 @@
         <div id="result"></div>
     </div>
 
+    <style>
+        #question {
+            font-size: 20px;
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border-left: 4px solid #007bff;
+        }
+        
+        .option {
+            margin: 10px auto;
+            padding: 15px;
+            border: 2px solid #dee2e6;
+            cursor: pointer;
+            width: 80%;
+            border-radius: 8px;
+            transition: all 0.2s;
+            background: white;
+        }
+        
+        .option:hover {
+            background-color: #e3f2fd;
+            border-color: #2196f3;
+        }
+        
+        .option.selected {
+            background-color: #1976d2;
+            color: white;
+            border-color: #1565c0;
+        }
+        
+        .option.locked {
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+        
+        #timer {
+            font-size: 18px;
+            color: #d32f2f;
+            font-weight: bold;
+            text-align: center;
+            padding: 10px;
+            background: #ffebee;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        #result {
+            margin-top: 30px;
+            font-size: 18px;
+            text-align: center;
+        }
+        
+        .quiz-container {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin: 20px 0;
+        }
+        
+        #user-section button {
+            background: linear-gradient(45deg, #4caf50, #45a049);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 20px;
+        }
+        
+        #user-section button:hover {
+            background: linear-gradient(45deg, #45a049, #4caf50);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.3);
+        }
+    </style>
+
     <script>
         const username = "<%= username %>";
         let currentIndex = 0;
@@ -39,7 +121,7 @@
         let currentToken = null;
         let currentSignature = null;
 
-        const QUIZ_DURATION = 30;
+        const QUIZ_DURATION = 30; // 答题时间（秒）
         let endTime = 0;
 
         async function startQuiz() {
@@ -59,14 +141,23 @@
         function startTimer() {
             timerId = setInterval(() => {
                 const remaining = Math.max(0, Math.floor((endTime - Date.now()) / 1000));
-                document.getElementById("timer").textContent = `倒计时：${remaining} 秒`;
-                document.getElementById("timer").style.color = remaining <= 5 ? '#ff4757' : '#333';
+                const timerElement = document.getElementById("timer");
+                timerElement.textContent = `倒计时：${remaining} 秒`;
+                
+                // 时间紧急时改变颜色
+                if (remaining <= 5) {
+                    timerElement.style.color = '#ff4757';
+                    timerElement.style.backgroundColor = '#ffeaa7';
+                } else {
+                    timerElement.style.color = '#d32f2f';
+                    timerElement.style.backgroundColor = '#ffebee';
+                }
                 
                 if (remaining <= 0) {
                     clearInterval(timerId);
                     submitQuiz();
                 }
-            }, 100);
+            }, 500); // 半秒刷新，更平滑 - 完全按照原版
         }
 
         async function loadNext() {
@@ -110,6 +201,9 @@
             `;
             
             opts.innerHTML = "";
+            // 防止选项闪现 - 完全按照原版
+            opts.style.display = "none";
+            setTimeout(() => { opts.style.display = "block"; }, 10);
             
             q.options.forEach((opt, idx) => {
                 const div = document.createElement("div");
@@ -127,9 +221,11 @@
             const options = document.getElementsByClassName("option");
             options[idx].classList.add("selected");
             
+            // 锁定所有选项 - 完全按照原版
             Array.from(options).forEach(el => {
                 el.onclick = null;
                 el.style.cursor = 'default';
+                el.classList.add("locked");
             });
 
             answers.push({ 
@@ -140,7 +236,7 @@
             });
             
             currentIndex++;
-            setTimeout(() => loadNext(), 500);
+            setTimeout(() => loadNext(), 500); // 延迟加载下一题
         }
 
         async function submitQuiz() {
@@ -179,8 +275,8 @@
                                 <div style="font-size: 1.2rem;">正确率：${percentage}% - ${grade}</div>
                             </div>
                             <div style="margin-top: 30px;">
-                                <button onclick="location.reload()" style="margin: 10px; background: #3498db;">再挑战一次</button>
-                                <button onclick="location.href='/'" style="margin: 10px; background: #95a5a6;">返回主页</button>
+                                <button onclick="location.reload()" style="margin: 10px; background: #3498db; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer;">再挑战一次</button>
+                                <button onclick="location.href='/'" style="margin: 10px; background: #95a5a6; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer;">返回主页</button>
                             </div>
                         </div>
                     `;
@@ -188,7 +284,7 @@
                     resultDiv.innerHTML = `
                         <div style="text-align: center; margin-top: 30px;">
                             <p style="color: #e74c3c; font-size: 1.2rem;">提交失败：${result.message || '未知错误'}</p>
-                            <button onclick="location.reload()" style="margin-top: 20px;">重试</button>
+                            <button onclick="location.reload()" style="margin-top: 20px; background: #e74c3c; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer;">重试</button>
                         </div>
                     `;
                 }
@@ -196,7 +292,7 @@
                 document.getElementById("result").innerHTML = `
                     <div style="text-align: center; margin-top: 30px;">
                         <p style="color: #e74c3c; font-size: 1.2rem;">网络错误，请重试</p>
-                        <button onclick="location.reload()" style="margin-top: 20px;">重试</button>
+                        <button onclick="location.reload()" style="margin-top: 20px; background: #e74c3c; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer;">重试</button>
                     </div>
                 `;
             }
