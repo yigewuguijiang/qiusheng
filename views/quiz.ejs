@@ -10,9 +10,11 @@
     <a href="/" class="back-button">← 返回</a>
     <div class="game-container">
         <h1>🧠 知识问答</h1>
+        <p>玩家：<%= username %></p>
+        <p style="color: #666;">30秒内回答15道题，看看你能得多少分！</p>
+        
         <div id="user-section">
-            <p>玩家：<%= username %></p>
-            <button onclick="startQuiz()">开始游戏</button>
+            <button onclick="startQuiz()">开始答题</button>
         </div>
         
         <div id="quiz" style="display:none">
@@ -27,8 +29,7 @@
     </div>
 
     <script>
-        const SERVER = "https://quiz-server-xbm0.onrender.com";
-        let username = "<%= username %>";
+        const username = "<%= username %>";
         let currentIndex = 0;
         let totalQuestions = 15;
         let answers = [];
@@ -44,6 +45,8 @@
         async function startQuiz() {
             document.getElementById("user-section").style.display = "none";
             document.getElementById("quiz").style.display = "block";
+            document.getElementById("result").innerHTML = "";
+            
             answers = [];
             currentIndex = 0;
             seenIds = [];
@@ -57,25 +60,31 @@
             timerId = setInterval(() => {
                 const remaining = Math.max(0, Math.floor((endTime - Date.now()) / 1000));
                 document.getElementById("timer").textContent = `倒计时：${remaining} 秒`;
+                document.getElementById("timer").style.color = remaining <= 5 ? '#ff4757' : '#333';
+                
                 if (remaining <= 0) {
                     clearInterval(timerId);
                     submitQuiz();
                 }
-            }, 500);
+            }, 100);
         }
 
         async function loadNext() {
             if (currentIndex >= totalQuestions) return submitQuiz();
             
             try {
-                const res = await fetch(`${SERVER}/quiz/next`, {
+                const res = await fetch('/api/quiz/next', {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ username, seen: seenIds })
                 });
+                
                 const data = await res.json();
                 
-                if (!data.success || !data.question) return submitQuiz();
+                if (!data.success || !data.question) {
+                    console.warn('No more questions available');
+                    return submitQuiz();
+                }
                 
                 currentToken = data.token;
                 currentSignature = data.signature;
@@ -92,16 +101,20 @@
             const qDiv = document.getElementById("question");
             const opts = document.getElementById("options");
 
-            qDiv.textContent = `题目 ${currentIndex + 1}：${q.question}`;
+            qDiv.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                    <span style="font-size: 1.1rem; font-weight: bold;">题目 ${currentIndex + 1}/${totalQuestions}</span>
+                    <span style="background: #e3f2fd; padding: 4px 12px; border-radius: 12px; font-size: 0.9rem; color: #1976d2;">第${currentIndex + 1}题</span>
+                </div>
+                <div style="font-size: 1.2rem; line-height: 1.4;">${q.question}</div>
+            `;
             
             opts.innerHTML = "";
-            opts.style.display = "none";
-            setTimeout(() => { opts.style.display = "block"; }, 10);
             
             q.options.forEach((opt, idx) => {
                 const div = document.createElement("div");
                 div.className = "option";
-                div.textContent = opt;
+                div.innerHTML = `<span style="color: #666; margin-right: 10px;">${String.fromCharCode(65 + idx)}</span>${opt}`;
                 div.onclick = () => selectAnswer(idx);
                 opts.appendChild(div);
             });
@@ -116,16 +129,18 @@
             
             Array.from(options).forEach(el => {
                 el.onclick = null;
+                el.style.cursor = 'default';
             });
 
             answers.push({ 
                 token: currentToken, 
                 signature: currentSignature, 
-                answerIndex: idx 
+                answerIndex: idx,
+                questionId: seenIds[seenIds.length - 1]
             });
             
             currentIndex++;
-            setTimeout(() => loadNext(), 300);
+            setTimeout(() => loadNext(), 500);
         }
 
         async function submitQuiz() {
@@ -134,33 +149,55 @@
             const nonce = crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).substring(2);
             
             try {
-                const res = await fetch(`${SERVER}/quiz/submit`, {
+                const res = await fetch('/api/quiz/submit', {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ username, answers, timestamp, nonce })
                 });
+                
                 const result = await res.json();
                 
                 document.getElementById("quiz").style.display = "none";
                 const resultDiv = document.getElementById("result");
                 
                 if (result.success) {
+                    const percentage = Math.round((result.score / result.total) * 100);
+                    let grade = "继续努力";
+                    let color = "#f39c12";
+                    
+                    if (percentage >= 90) { grade = "优秀"; color = "#27ae60"; }
+                    else if (percentage >= 80) { grade = "良好"; color = "#2ecc71"; }
+                    else if (percentage >= 70) { grade = "中等"; color = "#3498db"; }
+                    else if (percentage >= 60) { grade = "及格"; color = "#f39c12"; }
+                    else { grade = "需要加油"; color = "#e74c3c"; }
+                    
                     resultDiv.innerHTML = `
-                        <h2>游戏结束</h2>
-                        <p>得分：<strong>${result.score}/${result.total}</strong></p>
-                        <button onclick="location.reload()">再玩一次</button>
-                        <button onclick="location.href='/'">返回主页</button>
+                        <div style="text-align: center; margin-top: 30px;">
+                            <div style="background: linear-gradient(45deg, ${color}, ${color}aa); color: white; padding: 20px; border-radius: 15px; margin-bottom: 20px;">
+                                <h2 style="margin: 0 0 10px 0;">🎉 答题完成！</h2>
+                                <div style="font-size: 2rem; font-weight: bold; margin: 10px 0;">${result.score}/${result.total}</div>
+                                <div style="font-size: 1.2rem;">正确率：${percentage}% - ${grade}</div>
+                            </div>
+                            <div style="margin-top: 30px;">
+                                <button onclick="location.reload()" style="margin: 10px; background: #3498db;">再挑战一次</button>
+                                <button onclick="location.href='/'" style="margin: 10px; background: #95a5a6;">返回主页</button>
+                            </div>
+                        </div>
                     `;
                 } else {
                     resultDiv.innerHTML = `
-                        <p>提交失败：${result.message}</p>
-                        <button onclick="location.reload()">重试</button>
+                        <div style="text-align: center; margin-top: 30px;">
+                            <p style="color: #e74c3c; font-size: 1.2rem;">提交失败：${result.message || '未知错误'}</p>
+                            <button onclick="location.reload()" style="margin-top: 20px;">重试</button>
+                        </div>
                     `;
                 }
             } catch (error) {
                 document.getElementById("result").innerHTML = `
-                    <p>网络错误，请重试</p>
-                    <button onclick="location.reload()">重试</button>
+                    <div style="text-align: center; margin-top: 30px;">
+                        <p style="color: #e74c3c; font-size: 1.2rem;">网络错误，请重试</p>
+                        <button onclick="location.reload()" style="margin-top: 20px;">重试</button>
+                    </div>
                 `;
             }
         }
