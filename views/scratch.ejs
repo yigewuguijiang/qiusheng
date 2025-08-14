@@ -66,8 +66,9 @@
             grid-template-columns: repeat(5, 1fr);
             grid-template-rows: repeat(5, 1fr);
             font-weight: bold;
-            font-size: 1rem;
+            font-size: 0.9rem;
             color: #000;
+            gap: 1px;
         }
         
         .grid-item {
@@ -77,6 +78,34 @@
             align-items: center;
             border: 1px solid rgba(0,0,0,0.1);
             background: #fff;
+            padding: 2px;
+            min-height: 40px;
+        }
+        
+        .grid-item div:first-child {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .grid-item div:last-child {
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 2px;
+        }
+        
+        .winning-number {
+            background: #fff3cd !important;
+            border-color: #ffc107 !important;
+        }
+        
+        .winning-number div:first-child {
+            color: #856404 !important;
+        }
+        
+        .winning-number div:last-child {
+            color: #f57c00 !important;
+            font-weight: bold !important;
         }
         
         .scratch-ui {
@@ -147,8 +176,17 @@
             }
             
             .grid-item {
-                font-size: 0.8rem;
-                padding: 8px 4px;
+                font-size: 0.7rem;
+                padding: 4px 2px;
+                min-height: 35px;
+            }
+            
+            .grid-item div:first-child {
+                font-size: 0.9rem;
+            }
+            
+            .grid-item div:last-child {
+                font-size: 0.7rem;
             }
             
             .scratch-ui {
@@ -175,7 +213,7 @@
         <div class="board">
             <h2>🎯 刮刮卡</h2>
             <p>玩家：<%= username %></p>
-            <div class="labels">刮开格子，找到匹配的中奖号码！</div>
+            <div class="labels">前5个格子是中奖号码，后20个格子刮开找匹配！</div>
             <div id="scratchContainer">
                 <div id="scratchContent"></div>
                 <canvas id="scratchCanvas"></canvas>
@@ -203,9 +241,9 @@
         
         let hasVerified = true;
         
-        function createCard(num, prize) {
+        function createCard(num, prize, isWinning = false) {
             const cell = document.createElement('div');
-            cell.className = 'grid-item';
+            cell.className = isWinning ? 'grid-item winning-number' : 'grid-item';
             cell.innerHTML = `<div>${num}</div><div>${prize || ''}</div>`;
             return cell;
         }
@@ -252,14 +290,18 @@
                     return;
                 }
                 
-                const all = [
-                    ...data.winningNumbers.map(n => ({ num: n, amount: '中奖号码', prize: '中奖号码' })),
-                    ...data.slots
-                ];
-                
                 const container = document.getElementById('scratchContent');
                 container.innerHTML = '';
-                all.forEach(({ num, amount, prize }) => container.appendChild(createCard(num, amount || prize)));
+                
+                // 先添加5个中奖号码
+                data.winningNumbers.forEach(n => {
+                    container.appendChild(createCard(n, '中奖号码', true));
+                });
+                
+                // 再添加20个刮奖号码
+                data.slots.forEach(({ num, amount, prize }) => {
+                    container.appendChild(createCard(num, amount || prize, false));
+                });
                 
                 // 刮刮逻辑 - 完全按照原版
                 let isDrawing = false, lastX = null, lastY = null;

@@ -218,14 +218,22 @@
         const canvas = document.getElementById("wheel");
         const ctx = canvas.getContext("2d");
         
-        // 动态调整Canvas尺寸
+        // 动态调整Canvas尺寸 - 支持高DPI屏幕
         function resizeCanvas() {
             const isMobile = window.innerWidth <= 768;
             const size = isMobile ? 250 : 300;
-            canvas.width = size;
-            canvas.height = size;
+            const dpr = window.devicePixelRatio || 1;
+            
+            // 设置实际Canvas分辨率（考虑设备像素比）
+            canvas.width = size * dpr;
+            canvas.height = size * dpr;
+            
+            // 设置显示尺寸
             canvas.style.width = size + 'px';
             canvas.style.height = size + 'px';
+            
+            // 缩放Canvas绘制上下文
+            ctx.scale(dpr, dpr);
         }
         
         window.addEventListener('resize', () => {
@@ -237,9 +245,13 @@
         
         function drawWheel() {
             const arc = 2 * Math.PI / challenges.length;
-            const canvasSize = canvas.width;
-            const center = canvasSize / 2;
+            const isMobile = window.innerWidth <= 768;
+            const size = isMobile ? 250 : 300;
+            const center = size / 2;
             const radius = center - 10;
+            
+            // 清除画布
+            ctx.clearRect(0, 0, size, size);
             
             for (let i = 0; i < challenges.length; i++) {
                 const start = i * arc;
@@ -252,7 +264,9 @@
                 ctx.translate(center, center);
                 ctx.rotate(start + arc / 2);
                 ctx.fillStyle = "#fff";
-                ctx.font = canvasSize < 280 ? "8px Arial" : "10px Arial";
+                // 根据屏幕大小调整字体，确保高DPI屏幕下清晰
+                const fontSize = isMobile ? 10 : 12;
+                ctx.font = `${fontSize}px Arial`;
                 ctx.textAlign = "right";
                 ctx.fillText(challenges[i], radius - 10, 5);
                 ctx.restore();
@@ -302,10 +316,11 @@
                     const eased = 1 - Math.pow(1 - t, 3); // 原版缓动函数
                     const angle = finalAngle * eased;
                     
-                    const canvasSize = canvas.width;
-                    const center = canvasSize / 2;
+                    const isMobile = window.innerWidth <= 768;
+                    const size = isMobile ? 250 : 300;
+                    const center = size / 2;
                     
-                    ctx.clearRect(0, 0, canvasSize, canvasSize);
+                    ctx.clearRect(0, 0, size, size);
                     ctx.save();
                     ctx.translate(center, center);
                     ctx.rotate((angle * Math.PI) / 180);
