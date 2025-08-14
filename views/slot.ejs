@@ -184,33 +184,6 @@
             border: 1px solid #dee2e6;
         }
         
-        .disclaimer {
-            max-width: 900px;
-            margin: 30px auto;
-            padding: 25px;
-            background: linear-gradient(135deg, #fff8e1 0%, #fff3c4 100%);
-            border-radius: 12px;
-            border: 2px solid #ffc107;
-            font-size: 0.9rem;
-            line-height: 1.6;
-            color: #333;
-            text-align: center;
-        }
-        
-        .disclaimer h3 {
-            color: #f57c00;
-            margin-bottom: 20px;
-            font-size: 1.2rem;
-        }
-        
-        .disclaimer ul {
-            margin: 15px 0;
-            color: #555;
-        }
-        
-        .disclaimer li {
-            margin-bottom: 8px;
-        }
         
         /* 手机端优化 */
         @media (max-width: 768px) {
@@ -238,11 +211,29 @@
             
             .game-container {
                 padding: 15px;
+                width: 100%;
+                max-width: 400px;
+                margin: 0 auto;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
             }
             
             .game-container h1 {
                 font-size: 1.8rem;
                 margin-bottom: 15px;
+            }
+            
+            /* Mobile centering */
+            body {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                min-height: 100vh;
+                margin: 0;
+                padding: 10px;
             }
             
             .prize-info {
@@ -264,26 +255,6 @@
             
             .prize-item {
                 padding: 8px 4px;
-                font-size: 0.75rem;
-            }
-            
-            .disclaimer {
-                font-size: 0.8rem;
-                padding: 15px;
-                margin-top: 30px;
-            }
-            
-            .disclaimer h3 {
-                font-size: 1rem;
-                margin-bottom: 12px;
-            }
-            
-            .disclaimer ul {
-                padding-left: 15px;
-            }
-            
-            .disclaimer li {
-                margin-bottom: 6px;
                 font-size: 0.75rem;
             }
         }
@@ -425,19 +396,5 @@
         </div>
     </div>
     
-    <div class="disclaimer">
-        <h3>⚖️ 重要声明</h3>
-        <p><strong>免责声明：</strong>本游戏系统纯属娱乐性质，仅供消遣使用。本项目及其运营者郑重声明：</p>
-        <ul style="text-align: left; margin: 15px 0; padding-left: 20px;">
-            <li>本系统不涉及任何形式的真实货币交易、金融投资或商业盈利活动；</li>
-            <li>所有显示的"金额"、"积分"或"奖励"均为虚拟数值，不具有任何现实经济价值；</li>
-            <li>用户参与本游戏不会获得任何实际的经济收益或承担经济损失；</li>
-            <li>本系统不构成赌博、博彩或其他受法律限制的活动；</li>
-            <li>使用者应理性对待游戏内容，如因使用本系统产生的任何争议，本项目运营者不承担法律责任。</li>
-        </ul>
-        <p style="font-size: 0.9rem; color: #666; margin-top: 15px;">
-            <em>通过继续使用本系统，您确认已阅读、理解并同意上述声明的全部内容。</em>
-        </p>
-    </div>
 </body>
 </html>
