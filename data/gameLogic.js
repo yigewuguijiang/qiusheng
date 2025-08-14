@@ -152,7 +152,7 @@ class GameLogic {
             '给路人用吉他唱歌并打分',
             '集体热舞1分钟',
             '集体10个俯卧撑',
-            '不许说你我他5分钟',
+            '石头剪刀布公主抱下蹲5个',
             '要路人帅哥微信',
             '找路人要吃的'
         ],
@@ -160,7 +160,7 @@ class GameLogic {
         names: ['乌龟', '麻瓜', '大彪'],
         
         // 集体任务不需要加名字
-        groupTasks: ['集体10个深蹲', '集体热舞1分钟', '集体10个俯卧撑', '不许说你我他5分钟'],
+        groupTasks: ['集体10个深蹲', '集体热舞1分钟', '集体10个俯卧撑', '石头剪刀布公主抱下蹲5个'],
 
         spin() {
             const challengeIndex = GameLogic.randomInt(0, this.challenges.length - 1);
