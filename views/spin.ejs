@@ -97,6 +97,87 @@
             cursor: not-allowed;
             transform: none;
         }
+        
+        /* 挑战规则样式 */
+        .challenge-rules {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border: 2px solid #dee2e6;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .challenge-rules h3 {
+            text-align: center;
+            color: #495057;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+        
+        .rules-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .rule-section {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .rule-section strong {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+        }
+        
+        .success {
+            color: #28a745;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        
+        .fail {
+            color: #dc3545;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        
+        .special-rules {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        
+        .special-rules span {
+            padding-left: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .challenge-rules {
+                padding: 15px;
+                margin: 15px 0;
+            }
+            
+            .challenge-rules h3 {
+                font-size: 1rem;
+            }
+            
+            .rule-section {
+                padding: 12px;
+                font-size: 0.9rem;
+            }
+            
+            .success, .fail {
+                font-size: 1rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -105,6 +186,23 @@
         <h1>🎡 挑战转盘</h1>
         <p>玩家：<%= username %></p>
         <p style="color: #666;">转动转盘，接受生存直播挑战！</p>
+        
+        <div class="challenge-rules">
+            <h3>💰 挑战金额规则</h3>
+            <div class="rules-container">
+                <div class="rule-section">
+                    <strong>🎯 通用规则：</strong>
+                    <span>所有挑战成功 <span class="success">+20元</span> | 失败 <span class="fail">-20元</span></span>
+                </div>
+                <div class="rule-section special">
+                    <strong>⭐ 特殊规则（要微信）：</strong>
+                    <div class="special-rules">
+                        <span>麻瓜：成功 <span class="success">+30元</span> | 失败 <span class="fail">-10元</span></span>
+                        <span>大彪：成功 <span class="success">+20元</span> | 失败 <span class="fail">-10元</span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
         
         <div id="container">
             <div id="pointer"></div>
