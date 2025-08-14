@@ -211,6 +211,82 @@
         .disclaimer li {
             margin-bottom: 8px;
         }
+        
+        /* 手机端优化 */
+        @media (max-width: 768px) {
+            .slot-machine {
+                padding: 1rem;
+                margin: 15px 0;
+            }
+            
+            .reels {
+                gap: 10px;
+                padding: 15px;
+                margin-bottom: 1rem;
+            }
+            
+            .reel {
+                width: 80px;
+                height: 80px;
+                font-size: 2rem;
+            }
+            
+            #spinBtn {
+                padding: 12px 25px;
+                font-size: 16px;
+            }
+            
+            .game-container {
+                padding: 15px;
+            }
+            
+            .game-container h1 {
+                font-size: 1.8rem;
+                margin-bottom: 15px;
+            }
+            
+            .prize-info {
+                margin-top: 20px;
+                padding: 12px;
+                font-size: 0.8rem;
+            }
+            
+            .prize-info h3 {
+                font-size: 1rem;
+                margin-bottom: 10px;
+            }
+            
+            .prize-grid {
+                grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+                gap: 8px;
+                font-size: 0.75rem;
+            }
+            
+            .prize-item {
+                padding: 8px 4px;
+                font-size: 0.75rem;
+            }
+            
+            .disclaimer {
+                font-size: 0.8rem;
+                padding: 15px;
+                margin-top: 30px;
+            }
+            
+            .disclaimer h3 {
+                font-size: 1rem;
+                margin-bottom: 12px;
+            }
+            
+            .disclaimer ul {
+                padding-left: 15px;
+            }
+            
+            .disclaimer li {
+                margin-bottom: 6px;
+                font-size: 0.75rem;
+            }
+        }
     </style>
 
     <script>

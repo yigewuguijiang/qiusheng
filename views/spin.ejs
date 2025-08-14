@@ -26,6 +26,57 @@
         #button-area {
             margin-top: 20px;
         }
+        
+        /* 手机端优化 */
+        @media (max-width: 768px) {
+            #container {
+                margin: 10px 0;
+            }
+            
+            #wheel {
+                width: 250px;
+                height: 250px;
+            }
+            
+            #spinButton {
+                padding: 12px 25px;
+                font-size: 14px;
+            }
+            
+            .game-container {
+                padding: 15px;
+            }
+            
+            .game-container h1 {
+                font-size: 1.8rem;
+                margin-bottom: 15px;
+            }
+            
+            .disclaimer {
+                font-size: 0.8rem;
+                padding: 15px;
+                margin-top: 40px;
+            }
+            
+            .disclaimer h3 {
+                font-size: 1rem;
+                margin-bottom: 12px;
+            }
+            
+            .disclaimer h4 {
+                font-size: 0.9rem;
+                margin-bottom: 8px;
+            }
+            
+            .disclaimer ul {
+                padding-left: 15px;
+            }
+            
+            .disclaimer li {
+                margin-bottom: 6px;
+                font-size: 0.75rem;
+            }
+        }
         #spinButton {
             padding: 15px 30px;
             background: linear-gradient(45deg, #ff6b6b, #ee5a24);
@@ -84,22 +135,43 @@
         const canvas = document.getElementById("wheel");
         const ctx = canvas.getContext("2d");
         
+        // 动态调整Canvas尺寸
+        function resizeCanvas() {
+            const isMobile = window.innerWidth <= 768;
+            const size = isMobile ? 250 : 300;
+            canvas.width = size;
+            canvas.height = size;
+            canvas.style.width = size + 'px';
+            canvas.style.height = size + 'px';
+        }
+        
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+            drawWheel();
+        });
+        
+        resizeCanvas();
+        
         function drawWheel() {
             const arc = 2 * Math.PI / challenges.length;
+            const canvasSize = canvas.width;
+            const center = canvasSize / 2;
+            const radius = center - 10;
+            
             for (let i = 0; i < challenges.length; i++) {
                 const start = i * arc;
                 ctx.beginPath();
-                ctx.moveTo(150, 150);
+                ctx.moveTo(center, center);
                 ctx.fillStyle = colors[i];
-                ctx.arc(150, 150, 140, start, start + arc);
+                ctx.arc(center, center, radius, start, start + arc);
                 ctx.fill();
                 ctx.save();
-                ctx.translate(150, 150);
+                ctx.translate(center, center);
                 ctx.rotate(start + arc / 2);
                 ctx.fillStyle = "#fff";
-                ctx.font = "10px Arial";
+                ctx.font = canvasSize < 280 ? "8px Arial" : "10px Arial";
                 ctx.textAlign = "right";
-                ctx.fillText(challenges[i], 130, 5);
+                ctx.fillText(challenges[i], radius - 10, 5);
                 ctx.restore();
             }
         }
@@ -147,11 +219,14 @@
                     const eased = 1 - Math.pow(1 - t, 3); // 原版缓动函数
                     const angle = finalAngle * eased;
                     
-                    ctx.clearRect(0, 0, 300, 300);
+                    const canvasSize = canvas.width;
+                    const center = canvasSize / 2;
+                    
+                    ctx.clearRect(0, 0, canvasSize, canvasSize);
                     ctx.save();
-                    ctx.translate(150, 150);
+                    ctx.translate(center, center);
                     ctx.rotate((angle * Math.PI) / 180);
-                    ctx.translate(-150, -150);
+                    ctx.translate(-center, -center);
                     drawWheel();
                     ctx.restore();
                     
