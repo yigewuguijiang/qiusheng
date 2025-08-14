@@ -191,13 +191,13 @@
                 }
                 
                 const all = [
-                    ...data.winningNumbers.map(n => ({ num: n, prize: '中奖号码' })),
+                    ...data.winningNumbers.map(n => ({ num: n, amount: '中奖号码', prize: '中奖号码' })),
                     ...data.slots
                 ];
                 
                 const container = document.getElementById('scratchContent');
                 container.innerHTML = '';
-                all.forEach(({ num, prize }) => container.appendChild(createCard(num, prize)));
+                all.forEach(({ num, amount, prize }) => container.appendChild(createCard(num, amount || prize)));
                 
                 // 刮刮逻辑 - 完全按照原版
                 let isDrawing = false, lastX = null, lastY = null;
@@ -286,16 +286,19 @@
             
             userSlots.forEach(cell => {
                 const num = parseInt(cell.children[0].textContent);
-                const prize = cell.children[1].textContent;
-                if (winNums.includes(num)) {
-                    matched.push({ num, prize });
+                const amount = cell.children[1].textContent;
+                if (winNums.includes(num) && amount !== '0') {
+                    matched.push({ num, amount });
                 }
             });
             
             const result = document.getElementById('verifyResult');
             if (matched.length > 0) {
-                const msg = matched.map(m => `号码 ${m.num}: ${m.prize}`).join(', ');
-                result.textContent = `🎉 恭喜，你中了 ${matched.length} 个奖！${msg}`;
+                const totalAmount = matched.reduce((sum, m) => {
+                    const amt = parseInt(m.amount.replace('+', ''));
+                    return sum + (isNaN(amt) ? 0 : amt);
+                }, 0);
+                result.textContent = `🎉 恭喜中奖！总金额：+${totalAmount}`;
                 result.style.color = '#00ff88';
             } else {
                 result.textContent = '😢 很遗憾，这次没有中奖。再试一次！';

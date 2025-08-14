@@ -51,9 +51,9 @@
 <body>
     <a href="/" class="back-button">← 返回</a>
     <div class="game-container">
-        <h1>🎰 幸运转盘</h1>
+        <h1>🎡 挑战转盘</h1>
         <p>玩家：<%= username %></p>
-        <p style="color: #666;">转动转盘，看看你的运气如何！</p>
+        <p style="color: #666;">转动转盘，接受生存直播挑战！</p>
         
         <div id="container">
             <div id="pointer"></div>
@@ -70,15 +70,23 @@
     <script>
         const username = "<%= username %>";
         
-        // Prize pool and colors - 完全按照原版
-        const prizes = ["-$5 折扣", "免费游戏", "再试一次", "10% 折扣", "今日免费", "下次好运"];
-        const colors = ["#f44336", "#4caf50", "#2196f3", "#ff9800", "#9c27b0", "#607d8b"];
+        // 挑战任务和颜色 - 生存直播版
+        const challenges = [
+            '2元买吃的', 'Quiz', 'Scratch', 'Slot', '集体10个深蹲',
+            '和路人美女要微信', '和路人美女合照', '给路人用吉他唱歌并打分',
+            '20秒喝完一罐可乐', '集体10个俯卧撑', '不许说你我他5分钟',
+            '要路人帅哥微信', '找路人要吃的'
+        ];
+        const colors = [
+            "#f44336", "#4caf50", "#2196f3", "#ff9800", "#9c27b0", "#607d8b",
+            "#e91e63", "#795548", "#009688", "#ff5722", "#673ab7", "#3f51b5", "#ffc107"
+        ];
         const canvas = document.getElementById("wheel");
         const ctx = canvas.getContext("2d");
         
         function drawWheel() {
-            const arc = 2 * Math.PI / prizes.length;
-            for (let i = 0; i < prizes.length; i++) {
+            const arc = 2 * Math.PI / challenges.length;
+            for (let i = 0; i < challenges.length; i++) {
                 const start = i * arc;
                 ctx.beginPath();
                 ctx.moveTo(150, 150);
@@ -89,9 +97,9 @@
                 ctx.translate(150, 150);
                 ctx.rotate(start + arc / 2);
                 ctx.fillStyle = "#fff";
-                ctx.font = "14px Arial";
+                ctx.font = "10px Arial";
                 ctx.textAlign = "right";
-                ctx.fillText(prizes[i], 130, 5);
+                ctx.fillText(challenges[i], 130, 5);
                 ctx.restore();
             }
         }
@@ -151,8 +159,8 @@
                         requestAnimationFrame(animate);
                     } else {
                         resultDiv.innerHTML = `
-                            <div style="color: #28a745; font-weight: bold; text-align: center;">
-                                🎉 恭喜！你获得了：${data.prize}
+                            <div style="color: #28a745; font-weight: bold; text-align: center; font-size: 1.2rem; padding: 15px; background: #f8f9fa; border-radius: 10px; margin-top: 20px;">
+                                ${data.prize}
                             </div>
                         `;
                         button.disabled = false;

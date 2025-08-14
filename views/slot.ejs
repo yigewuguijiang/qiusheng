@@ -188,18 +188,17 @@
     <script>
         const username = "<%= username %>";
         const reels = ['r1', 'r2', 'r3'];
-        const symbols = ['🍎', '🍋', '🍒', '🍇', '💎', '7️⃣', '🔔', '⭐'];
+        const symbols = ['+20', '+10', '-10', '-20', '0', '+5', '-5'];
         
-        // 奖品映射
+        // 金额映射
         const symbolMap = {
-            '苹果': '🍎',
-            '柠檬': '🍋', 
-            '樱桃': '🍒',
-            '葡萄': '🍇',
-            '钻石': '💎',
-            '七七七': '7️⃣',
-            '铃铛': '🔔',
-            '星星': '⭐'
+            '+20': '+20',
+            '+10': '+10', 
+            '-10': '-10',
+            '-20': '-20',
+            '无奖': '0',
+            '+5': '+5',
+            '-5': '-5'
         };
         
         function generateNonce(length = 16) {
@@ -250,15 +249,14 @@
                     
                     // 显示结果消息
                     setTimeout(() => {
-                        if (isWin && reward !== '谢谢惠顾') {
+                        if (reward && reward !== '0' && reward !== '无奖') {
                             resultDiv.innerHTML = `
                                 <div class="result-win">
-                                    🎉 恭喜中奖！<br>
-                                    获得：${reward}
+                                    ${reward}
                                 </div>
                             `;
                         } else {
-                            resultDiv.innerHTML = `<div class="result-lose">再接再厉，下次好运！</div>`;
+                            resultDiv.innerHTML = `<div class="result-lose">0</div>`;
                         }
                         
                         button.disabled = false;
@@ -289,9 +287,9 @@
                     return;
                 }
                 
-                // 转换文本结果为表情符号
-                const finalSymbols = data.reels.map(reel => symbolMap[reel] || '❓');
-                const isWin = data.reward && data.reward !== '谢谢惠顾';
+                // 转换文本结果为金额符号
+                const finalSymbols = data.reels.map(reel => symbolMap[reel] || '0');
+                const isWin = data.reward && data.reward !== '0' && data.reward !== '无奖';
                 
                 animateReels(finalSymbols, data.reward, isWin);
                 
@@ -312,13 +310,14 @@
     </script>
     
     <div class="prize-info">
-        <h3>🏆 奖品说明</h3>
-        <p>三个相同图案即可获得相应奖励！特别图案奖励更丰富：</p>
+        <h3>💰 金额说明</h3>
+        <p>金额随机转动，概率分配：</p>
         <div class="prize-grid">
-            <div class="prize-item">💎💎💎 - 钻石大奖</div>
-            <div class="prize-item">7️⃣7️⃣7️⃣ - 幸运七</div>
-            <div class="prize-item">⭐⭐⭐ - 星星奖励</div>
-            <div class="prize-item">其他三连 - 普通奖励</div>
+            <div class="prize-item">+20 - 10%概率</div>
+            <div class="prize-item">+10 - 20%概率</div>
+            <div class="prize-item">-10 - 20%概率</div>
+            <div class="prize-item">-20 - 10%概率</div>
+            <div class="prize-item">0 - 40%概率</div>
         </div>
     </div>
 </body>

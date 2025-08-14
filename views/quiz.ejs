@@ -257,22 +257,48 @@
                 const resultDiv = document.getElementById("result");
                 
                 if (result.success) {
-                    const percentage = Math.round((result.score / result.total) * 100);
-                    let grade = "继续努力";
+                    const score = result.score;
+                    let points = 0;
+                    let pointsText = "";
                     let color = "#f39c12";
                     
-                    if (percentage >= 90) { grade = "优秀"; color = "#27ae60"; }
-                    else if (percentage >= 80) { grade = "良好"; color = "#2ecc71"; }
-                    else if (percentage >= 70) { grade = "中等"; color = "#3498db"; }
-                    else if (percentage >= 60) { grade = "及格"; color = "#f39c12"; }
-                    else { grade = "需要加油"; color = "#e74c3c"; }
+                    // 新积分规则
+                    if (score < 2) { 
+                        points = -20; 
+                        pointsText = "扣20分"; 
+                        color = "#e74c3c"; 
+                    }
+                    else if (score < 4) { 
+                        points = -10; 
+                        pointsText = "扣10分"; 
+                        color = "#e67e22"; 
+                    }
+                    else if (score >= 5 && score <= 6) { 
+                        points = +10; 
+                        pointsText = "加10分"; 
+                        color = "#3498db"; 
+                    }
+                    else if (score >= 7) { 
+                        points = +20; 
+                        pointsText = "加20分"; 
+                        color = "#27ae60"; 
+                    }
+                    else { 
+                        points = 0; 
+                        pointsText = "0分"; 
+                        color = "#95a5a6"; 
+                    }
                     
                     resultDiv.innerHTML = `
                         <div style="text-align: center; margin-top: 30px;">
                             <div style="background: linear-gradient(45deg, ${color}, ${color}aa); color: white; padding: 20px; border-radius: 15px; margin-bottom: 20px;">
-                                <h2 style="margin: 0 0 10px 0;">🎉 答题完成！</h2>
-                                <div style="font-size: 2rem; font-weight: bold; margin: 10px 0;">${result.score}/${result.total}</div>
-                                <div style="font-size: 1.2rem;">正确率：${percentage}% - ${grade}</div>
+                                <h2 style="margin: 0 0 10px 0;">Quiz完成！</h2>
+                                <div style="font-size: 2rem; font-weight: bold; margin: 10px 0;">${score}/15</div>
+                                <div style="font-size: 1.5rem; font-weight: bold;">${pointsText}</div>
+                            </div>
+                            <div style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 10px; color: #333;">
+                                <p><strong>积分规则：</strong></p>
+                                <p>小于2分扣20 | 小于4分扣10 | 5-6分加10 | 7分以上加20</p>
                             </div>
                             <div style="margin-top: 30px;">
                                 <button onclick="location.reload()" style="margin: 10px; background: #3498db; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer;">再挑战一次</button>
