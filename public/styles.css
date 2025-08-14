@@ -66,6 +66,99 @@ body {
     }
 }
 
+/* 转盘触发规则样式 */
+.trigger-rules {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 25px;
+    border-radius: 15px;
+    margin-bottom: 40px;
+    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+}
+
+.trigger-rules h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 1.5rem;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.rules-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    align-items: center;
+}
+
+.rule-item {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+}
+
+.rule-item:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-2px);
+}
+
+.rule-icon {
+    font-size: 2.5rem;
+    margin-right: 15px;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+}
+
+.rule-text {
+    flex: 1;
+    line-height: 1.6;
+}
+
+.rule-text strong {
+    display: inline-block;
+    margin-bottom: 5px;
+    font-size: 1.1rem;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+}
+
+/* 手机端适配 */
+@media (max-width: 768px) {
+    .trigger-rules {
+        padding: 20px 15px;
+        margin-bottom: 30px;
+    }
+    
+    .trigger-rules h2 {
+        font-size: 1.3rem;
+        margin-bottom: 20px;
+    }
+    
+    .rules-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .rule-item {
+        padding: 15px;
+    }
+    
+    .rule-icon {
+        font-size: 2rem;
+        margin-right: 12px;
+    }
+    
+    .rule-text {
+        font-size: 0.9rem;
+    }
+    
+    .rule-text strong {
+        font-size: 1rem;
+    }
+}
+
 .game-card {
     background: #f8f8f8;
     border-radius: 12px;
