@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>幸运转盘</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <a href="/" class="back-button">← 返回</a>
+    <div class="game-container">
+        <h1>🎡 幸运转盘</h1>
+        <p>玩家：<%= username %></p>
+        
+        <div class="wheel-container">
+            <div class="wheel-pointer"></div>
+            <canvas id="wheelCanvas" width="400" height="400"></canvas>
+        </div>
+        
+        <button id="spinButton" onclick="spin()">开始旋转</button>
+        
+        <div id="result" style="margin-top: 20px; font-size: 1.2rem; min-height: 40px;"></div>
+    </div>
+
+    <style>
+        .wheel-container {
+            position: relative;
+            margin: 30px auto;
+            width: 400px;
+            height: 400px;
+        }
+        
+        #wheelCanvas {
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .wheel-pointer {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-top: 40px solid #333;
+            z-index: 10;
+        }
+        
+        .result-win {
+            color: #4caf50;
+            font-weight: bold;
+            animation: bounce 0.5s ease-in-out;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+    </style>
+
+    <script>
+        const username = "<%= username %>";
+        const prizes = ["-5元优惠", "免费一局", "再来一次", "9折优惠", "当天免费", "谢谢参与"];
+        const colors = ["#ff6b6b", "#4ecdc4", "#45b7d1", "#ffd93d", "#a8e6cf", "#dcedc1"];
+        const canvas = document.getElementById("wheelCanvas");
+        const ctx = canvas.getContext("2d");
+        
+        function drawWheel() {
+            const centerX = 200;
+            const centerY = 200;
+            const radius = 180;
+            const arc = (2 * Math.PI) / prizes.length;
+            
+            ctx.clearRect(0, 0, 400, 400);
+            
+            // Draw sections
+            for (let i = 0; i < prizes.length; i++) {
+                const startAngle = i * arc;
+                const endAngle = (i + 1) * arc;
+                
+                // Draw section
+                ctx.beginPath();
+                ctx.moveTo(centerX, centerY);
+                ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+                ctx.closePath();
+                ctx.fillStyle = colors[i];
+                ctx.fill();
+                
+                // Draw border
+                ctx.strokeStyle = "#fff";
+                ctx.lineWidth = 3;
+                ctx.stroke();
+                
+                // Draw text
+                ctx.save();
+                ctx.translate(centerX, centerY);
+                ctx.rotate(startAngle + arc / 2);
+                ctx.textAlign = "right";
+                ctx.fillStyle = "#333";
+                ctx.font = "bold 18px Arial";
+                ctx.fillText(prizes[i], radius - 30, 5);
+                ctx.restore();
+            }
+            
+            // Draw center circle
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, 30, 0, 2 * Math.PI);
+            ctx.fillStyle = "#333";
+            ctx.fill();
+        }
+        
+        drawWheel();
+        
+        async function spin() {
+            const button = document.getElementById("spinButton");
+            const resultDiv = document.getElementById("result");
+            
+            button.disabled = true;
+            resultDiv.textContent = "旋转中...";
+            
+            const timestamp = Math.floor(Date.now() / 1000);
+            const nonce = crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).substring(2);
+            
+            try {
+                const response = await fetch("/api/spin", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ username, timestamp, nonce })
+                });
+                
+                const data = await response.json();
+                
+                if (!data.success) {
+                    resultDiv.textContent = "错误：" + data.message;
+                    button.disabled = false;
+                    return;
+                }
+                
+                // Animate wheel
+                const totalRotation = 360 * 5 + (270 - data.angle);
+                const duration = 4000;
+                const startTime = performance.now();
+                
+                function animate(currentTime) {
+                    const elapsed = currentTime - startTime;
+                    const progress = Math.min(elapsed / duration, 1);
+                    const easeOut = 1 - Math.pow(1 - progress, 3);
+                    const rotation = totalRotation * easeOut;
+                    
+                    ctx.save();
+                    ctx.translate(200, 200);
+                    ctx.rotate((rotation * Math.PI) / 180);
+                    ctx.translate(-200, -200);
+                    drawWheel();
+                    ctx.restore();
+                    
+                    if (progress < 1) {
+                        requestAnimationFrame(animate);
+                    } else {
+                        resultDiv.innerHTML = `<span class="result-win">🎉 恭喜获得：${data.prize}</span>`;
+                        button.disabled = false;
+                    }
+                }
+                
+                requestAnimationFrame(animate);
+                
+            } catch (error) {
+                resultDiv.textContent = "网络错误，请重试";
+                button.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>

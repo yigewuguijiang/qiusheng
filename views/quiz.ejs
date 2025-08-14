@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>知识问答</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <a href="/" class="back-button">← 返回</a>
+    <div class="game-container">
+        <h1>🧠 知识问答</h1>
+        <div id="user-section">
+            <p>玩家：<%= username %></p>
+            <button onclick="startQuiz()">开始游戏</button>
+        </div>
+        
+        <div id="quiz" style="display:none">
+            <p id="timer"></p>
+            <div class="quiz-container">
+                <div id="question" class="question"></div>
+                <div id="options" class="options"></div>
+            </div>
+        </div>
+        
+        <div id="result"></div>
+    </div>
+
+    <script>
+        const SERVER = "https://quiz-server-xbm0.onrender.com";
+        let username = "<%= username %>";
+        let currentIndex = 0;
+        let totalQuestions = 15;
+        let answers = [];
+        let timerId;
+        let seenIds = [];
+        let lock = false;
+        let currentToken = null;
+        let currentSignature = null;
+
+        const QUIZ_DURATION = 30;
+        let endTime = 0;
+
+        async function startQuiz() {
+            document.getElementById("user-section").style.display = "none";
+            document.getElementById("quiz").style.display = "block";
+            answers = [];
+            currentIndex = 0;
+            seenIds = [];
+
+            endTime = Date.now() + QUIZ_DURATION * 1000;
+            startTimer();
+            await loadNext();
+        }
+
+        function startTimer() {
+            timerId = setInterval(() => {
+                const remaining = Math.max(0, Math.floor((endTime - Date.now()) / 1000));
+                document.getElementById("timer").textContent = `倒计时：${remaining} 秒`;
+                if (remaining <= 0) {
+                    clearInterval(timerId);
+                    submitQuiz();
+                }
+            }, 500);
+        }
+
+        async function loadNext() {
+            if (currentIndex >= totalQuestions) return submitQuiz();
+            
+            try {
+                const res = await fetch(`${SERVER}/quiz/next`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ username, seen: seenIds })
+                });
+                const data = await res.json();
+                
+                if (!data.success || !data.question) return submitQuiz();
+                
+                currentToken = data.token;
+                currentSignature = data.signature;
+                seenIds.push(data.question.id);
+                showQuestion(data.question);
+            } catch (error) {
+                console.error('Error loading question:', error);
+                submitQuiz();
+            }
+        }
+
+        function showQuestion(q) {
+            lock = false;
+            const qDiv = document.getElementById("question");
+            const opts = document.getElementById("options");
+
+            qDiv.textContent = `题目 ${currentIndex + 1}：${q.question}`;
+            
+            opts.innerHTML = "";
+            opts.style.display = "none";
+            setTimeout(() => { opts.style.display = "block"; }, 10);
+            
+            q.options.forEach((opt, idx) => {
+                const div = document.createElement("div");
+                div.className = "option";
+                div.textContent = opt;
+                div.onclick = () => selectAnswer(idx);
+                opts.appendChild(div);
+            });
+        }
+
+        function selectAnswer(idx) {
+            if (lock) return;
+            lock = true;
+            
+            const options = document.getElementsByClassName("option");
+            options[idx].classList.add("selected");
+            
+            Array.from(options).forEach(el => {
+                el.onclick = null;
+            });
+
+            answers.push({ 
+                token: currentToken, 
+                signature: currentSignature, 
+                answerIndex: idx 
+            });
+            
+            currentIndex++;
+            setTimeout(() => loadNext(), 300);
+        }
+
+        async function submitQuiz() {
+            clearInterval(timerId);
+            const timestamp = Math.floor(Date.now() / 1000);
+            const nonce = crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).substring(2);
+            
+            try {
+                const res = await fetch(`${SERVER}/quiz/submit`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ username, answers, timestamp, nonce })
+                });
+                const result = await res.json();
+                
+                document.getElementById("quiz").style.display = "none";
+                const resultDiv = document.getElementById("result");
+                
+                if (result.success) {
+                    resultDiv.innerHTML = `
+                        <h2>游戏结束</h2>
+                        <p>得分：<strong>${result.score}/${result.total}</strong></p>
+                        <button onclick="location.reload()">再玩一次</button>
+                        <button onclick="location.href='/'">返回主页</button>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <p>提交失败：${result.message}</p>
+                        <button onclick="location.reload()">重试</button>
+                    `;
+                }
+            } catch (error) {
+                document.getElementById("result").innerHTML = `
+                    <p>网络错误，请重试</p>
+                    <button onclick="location.reload()">重试</button>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>
