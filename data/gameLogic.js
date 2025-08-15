@@ -14,11 +14,26 @@ class GameLogic {
 
     // Quiz 游戏逻辑
     static quiz = {
+        // 前6题必选类别
+        requiredCategories: ['常识', '英语', '数学', '语文', '音乐', '体育'],
+        
         // 获取随机题目
-        getRandomQuestion(questions, seenIds = []) {
+        getRandomQuestion(questions, seenIds = [], questionIndex = 0) {
             const availableQuestions = questions.filter(q => !seenIds.includes(q.id));
             if (availableQuestions.length === 0) return null;
             
+            // 前6题确保各类别各一道
+            if (questionIndex < 6) {
+                const requiredCategory = this.requiredCategories[questionIndex];
+                const categoryQuestions = availableQuestions.filter(q => q.category === requiredCategory);
+                
+                if (categoryQuestions.length > 0) {
+                    const randomIndex = GameLogic.randomInt(0, categoryQuestions.length - 1);
+                    return categoryQuestions[randomIndex];
+                }
+            }
+            
+            // 第7题及以后完全随机
             const randomIndex = GameLogic.randomInt(0, availableQuestions.length - 1);
             return availableQuestions[randomIndex];
         },
@@ -167,7 +182,7 @@ class GameLogic {
         names: ['乌龟', '麻瓜', '大彪'],
         
         // 集体任务不需要加名字
-        groupTasks: ['集体10个深蹲', '集体热舞1分钟', '集体10个俯卧撑', '公主抱下蹲5个'],
+        groupTasks: ['集体10个深蹲', '集体热舞1分钟', '集体10个俯卧撑', '公主抱下蹲5个', '转盘次数+2'],
 
         spin() {
             const challengeIndex = GameLogic.randomInt(0, this.challenges.length - 1);

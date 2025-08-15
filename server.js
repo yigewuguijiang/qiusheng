@@ -71,9 +71,9 @@ app.get('/api/user-info', (req, res) => {
 
 app.post('/api/quiz/next', (req, res) => {
     try {
-        const { username, seen = [] } = req.body;
+        const { username, seen = [], questionIndex = 0 } = req.body;
         
-        const question = GameLogic.quiz.getRandomQuestion(questions, seen);
+        const question = GameLogic.quiz.getRandomQuestion(questions, seen, questionIndex);
         if (!question) {
             return res.json({ success: false, message: '没有更多题目了' });
         }

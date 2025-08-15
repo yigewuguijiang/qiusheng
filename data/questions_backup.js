@@ -1,739 +1,1205 @@
 const questions = [
-  // 小学数学题 (1-30)
   {
     "id": 1,
     "question": "3 + 5 = ?",
-    "options": ["7", "8", "9", "10"],
+    "options": [
+      "7",
+      "8",
+      "9",
+      "10"
+    ],
     "correct": 1,
     "category": "数学"
   },
   {
     "id": 2,
-    "question": "12 - 7 = ?",
-    "options": ["4", "5", "6", "7"],
-    "correct": 1,
-    "category": "数学"
+    "question": "下列哪个字的读音是正确的？",
+    "options": [
+      "着(zhuó)急",
+      "着(zháo)急", 
+      "着(zhāo)急",
+      "着(zhe)急"
+    ],
+    "correct": 0,
+    "category": "语文"
   },
   {
     "id": 3,
-    "question": "6 × 4 = ?",
-    "options": ["20", "24", "28", "32"],
-    "correct": 1,
-    "category": "数学"
+    "question": "澳大利亚的首都？",
+    "options": [
+      "悉尼",
+      "墨尔本",
+      "堪培拉",
+      "布里斯班"
+    ],
+    "correct": 2,
+    "category": "地理"
   },
   {
     "id": 4,
-    "question": "15 ÷ 3 = ?",
-    "options": ["3", "4", "5", "6"],
+    "question": "加州的首府是？",
+    "options": [
+      "洛杉矶",
+      "旧金山",
+      "萨克拉门托",
+      "圣迭戈"
+    ],
     "correct": 2,
-    "category": "数学"
+    "category": "地理"
   },
   {
     "id": 5,
-    "question": "一个三角形有几条边？",
-    "options": ["2", "3", "4", "5"],
-    "correct": 1,
-    "category": "数学"
+    "question": "美国面积最大的州？",
+    "options": [
+      "德克萨斯",
+      "加利福尼亚",
+      "阿拉斯加",
+      "蒙大拿"
+    ],
+    "correct": 2,
+    "category": "地理"
   },
   {
     "id": 6,
-    "question": "7 + 8 = ?",
-    "options": ["14", "15", "16", "17"],
+    "question": "美国的独立日是哪一天？",
+    "options": [
+      "6月4日",
+      "7月4日",
+      "8月4日",
+      "9月4日"
+    ],
     "correct": 1,
-    "category": "数学"
+    "category": "历史"
   },
   {
     "id": 7,
-    "question": "20 - 9 = ?",
-    "options": ["9", "10", "11", "12"],
-    "correct": 2,
-    "category": "数学"
+    "question": "加拿大的官方语言是哪两种？",
+    "options": [
+      "英语和西班牙语",
+      "英语和法语",
+      "法语和德语",
+      "英语和德语"
+    ],
+    "correct": 1,
+    "category": "常识"
   },
   {
     "id": 8,
-    "question": "5 × 6 = ?",
-    "options": ["25", "30", "35", "40"],
-    "correct": 1,
-    "category": "数学"
+    "question": "美国的货币单位是？",
+    "options": [
+      "欧元",
+      "比索",
+      "美元",
+      "英镑"
+    ],
+    "correct": 2,
+    "category": "常识"
   },
   {
     "id": 9,
-    "question": "24 ÷ 4 = ?",
-    "options": ["5", "6", "7", "8"],
-    "correct": 1,
-    "category": "数学"
+    "question": "尼亚加拉大瀑布位于哪两个国家之间？",
+    "options": [
+      "美国和加拿大",
+      "美国和墨西哥",
+      "加拿大和英国",
+      "美国和英国"
+    ],
+    "correct": 0,
+    "category": "地理"
   },
   {
     "id": 10,
-    "question": "一个正方形有几个角？",
-    "options": ["3", "4", "5", "6"],
+    "question": "美国的第一任总统是？",
+    "options": [
+      "林肯",
+      "华盛顿",
+      "杰斐逊",
+      "罗斯福"
+    ],
     "correct": 1,
-    "category": "数学"
+    "category": "历史"
   },
   {
     "id": 11,
-    "question": "9 + 6 = ?",
-    "options": ["13", "14", "15", "16"],
-    "correct": 2,
-    "category": "数学"
+    "question": "加拿大使用的电压标准是多少？",
+    "options": [
+      "110V",
+      "220V",
+      "240V",
+      "12V"
+    ],
+    "correct": 0,
+    "category": "常识"
   },
   {
     "id": 12,
-    "question": "18 - 5 = ?",
-    "options": ["11", "12", "13", "14"],
+    "question": "哪一个城市是美国人口最多的城市？",
+    "options": [
+      "洛杉矶",
+      "芝加哥",
+      "纽约",
+      "休斯顿"
+    ],
     "correct": 2,
-    "category": "数学"
+    "category": "地理"
   },
   {
     "id": 13,
-    "question": "7 × 3 = ?",
-    "options": ["18", "19", "20", "21"],
-    "correct": 3,
-    "category": "数学"
+    "question": "加拿大国旗中枫叶的颜色是？",
+    "options": [
+      "绿色",
+      "红色",
+      "黄色",
+      "白色"
+    ],
+    "correct": 1,
+    "category": "文化"
   },
   {
     "id": 14,
-    "question": "36 ÷ 6 = ?",
-    "options": ["5", "6", "7", "8"],
+    "question": "哪一座桥连接旧金山与马林县？",
+    "options": [
+      "布鲁克林大桥",
+      "金门大桥",
+      "维多利亚大桥",
+      "皇后大桥"
+    ],
     "correct": 1,
-    "category": "数学"
+    "category": "地理"
   },
   {
     "id": 15,
-    "question": "一天有多少小时？",
-    "options": ["20", "22", "24", "26"],
+    "question": "美国一共有多少个州？",
+    "options": [
+      "48",
+      "49",
+      "50",
+      "51"
+    ],
     "correct": 2,
-    "category": "数学"
+    "category": "地理"
   },
   {
     "id": 16,
-    "question": "4 + 9 = ?",
-    "options": ["11", "12", "13", "14"],
-    "correct": 2,
-    "category": "数学"
+    "question": "美国的首都是哪座城市？",
+    "options": [
+      "纽约",
+      "华盛顿特区",
+      "洛杉矶",
+      "芝加哥"
+    ],
+    "correct": 1,
+    "category": "地理"
   },
   {
     "id": 17,
-    "question": "25 - 8 = ?",
-    "options": ["15", "16", "17", "18"],
-    "correct": 2,
-    "category": "数学"
+    "question": "加拿大最大的省份是？",
+    "options": [
+      "安大略省",
+      "魁北克省",
+      "不列颠哥伦比亚省",
+      "努纳武特"
+    ],
+    "correct": 3,
+    "category": "地理"
   },
   {
     "id": 18,
-    "question": "8 × 5 = ?",
-    "options": ["35", "40", "45", "50"],
-    "correct": 1,
-    "category": "数学"
+    "question": "美国国旗上有多少颗星星？",
+    "options": [
+      "50",
+      "48",
+      "52",
+      "51"
+    ],
+    "correct": 0,
+    "category": "文化"
   },
   {
     "id": 19,
-    "question": "42 ÷ 7 = ?",
-    "options": ["5", "6", "7", "8"],
-    "correct": 1,
-    "category": "数学"
+    "question": "美国的独立宣言签署于哪一年？",
+    "options": [
+      "1776年",
+      "1789年",
+      "1812年",
+      "1492年"
+    ],
+    "correct": 0,
+    "category": "历史"
   },
   {
     "id": 20,
-    "question": "一个圆有几条边？",
-    "options": ["0", "1", "2", "无数"],
-    "correct": 0,
-    "category": "数学"
+    "question": "蒙特利尔位于哪个省份？",
+    "options": [
+      "安大略省",
+      "魁北克省",
+      "艾伯塔省",
+      "曼尼托巴省"
+    ],
+    "correct": 1,
+    "category": "地理"
   },
   {
     "id": 21,
-    "question": "11 + 7 = ?",
-    "options": ["16", "17", "18", "19"],
-    "correct": 2,
-    "category": "数学"
+    "question": "美国国鸟是什么？",
+    "options": [
+      "秃鹰",
+      "白头海雕",
+      "红尾鹰",
+      "金雕"
+    ],
+    "correct": 1,
+    "category": "常识"
   },
   {
     "id": 22,
-    "question": "30 - 12 = ?",
-    "options": ["16", "17", "18", "19"],
-    "correct": 2,
-    "category": "数学"
+    "question": "加拿大最大的城市是？",
+    "options": [
+      "多伦多",
+      "蒙特利尔",
+      "温哥华",
+      "卡尔加里"
+    ],
+    "correct": 0,
+    "category": "地理"
   },
   {
     "id": 23,
-    "question": "9 × 4 = ?",
-    "options": ["32", "34", "36", "38"],
-    "correct": 2,
-    "category": "数学"
+    "question": "美国的国家象征是什么？",
+    "options": [
+      "自由女神像",
+      "金门大桥",
+      "白宫",
+      "大峡谷"
+    ],
+    "correct": 0,
+    "category": "地理"
   },
   {
     "id": 24,
-    "question": "56 ÷ 8 = ?",
-    "options": ["6", "7", "8", "9"],
-    "correct": 1,
-    "category": "数学"
+    "question": "北美最长的河流是？",
+    "options": [
+      "密西西比河",
+      "圣劳伦斯河",
+      "科罗拉多河",
+      "俄亥俄河"
+    ],
+    "correct": 0,
+    "category": "地理"
   },
   {
     "id": 25,
-    "question": "一周有几天？",
-    "options": ["5", "6", "7", "8"],
-    "correct": 2,
-    "category": "数学"
+    "question": "加拿大使用的官方货币是？",
+    "options": [
+      "美元",
+      "加元",
+      "英镑",
+      "欧元"
+    ],
+    "correct": 1,
+    "category": "常识"
   },
   {
     "id": 26,
-    "question": "13 + 9 = ?",
-    "options": ["20", "21", "22", "23"],
-    "correct": 2,
-    "category": "数学"
+    "question": "美国的最高峰是？",
+    "options": [
+      "华盛顿山",
+      "麦金利山（丹纳利峰）",
+      "落基山",
+      "阿巴拉契亚山"
+    ],
+    "correct": 1,
+    "category": "常识"
   },
   {
     "id": 27,
-    "question": "40 - 15 = ?",
-    "options": ["23", "24", "25", "26"],
-    "correct": 2,
-    "category": "数学"
+    "question": "多伦多位于哪个湖畔？",
+    "options": [
+      "安大略湖",
+      "密歇根湖",
+      "休伦湖",
+      "伊利湖"
+    ],
+    "correct": 0,
+    "category": "地理"
   },
   {
     "id": 28,
-    "question": "6 × 7 = ?",
-    "options": ["40", "41", "42", "43"],
-    "correct": 2,
-    "category": "数学"
+    "question": "美国的总统官邸叫什么名字？",
+    "options": [
+      "白宫",
+      "国会大厦",
+      "林肯纪念堂",
+      "自由女神像"
+    ],
+    "correct": 0,
+    "category": "历史"
   },
   {
     "id": 29,
-    "question": "63 ÷ 9 = ?",
-    "options": ["6", "7", "8", "9"],
-    "correct": 1,
-    "category": "数学"
+    "question": "加拿大的国庆日是哪一天？",
+    "options": [
+      "7月1日",
+      "6月1日",
+      "5月1日",
+      "8月1日"
+    ],
+    "correct": 0,
+    "category": "常识"
   },
   {
     "id": 30,
-    "question": "一年有几个月？",
-    "options": ["10", "11", "12", "13"],
-    "correct": 2,
-    "category": "数学"
+    "question": "美国著名的自由女神像位于哪座城市？",
+    "options": [
+      "纽约",
+      "华盛顿特区",
+      "洛杉矶",
+      "波士顿"
+    ],
+    "correct": 0,
+    "category": "地理"
   },
-
-  // 小学语文题 (31-60)
   {
     "id": 31,
-    "question": "下列哪个字的读音是正确的？",
-    "options": ["着(zhuó)急", "着(zháo)急", "着(zhāo)急", "着(zhe)急"],
+    "question": "美国参议院共有多少名议员？",
+    "options": [
+      "100",
+      "435",
+      "50",
+      "535"
+    ],
     "correct": 0,
-    "category": "语文"
+    "category": "政治"
   },
   {
     "id": 32,
-    "question": ""春眠不觉晓"的下一句是什么？",
-    "options": ["处处闻啼鸟", "夜来风雨声", "花落知多少", "草长莺飞二月天"],
+    "question": "加拿大哪个城市被称为“枫叶之都”？",
+    "options": [
+      "魁北克市",
+      "多伦多",
+      "温哥华",
+      "蒙特利尔"
+    ],
     "correct": 0,
-    "category": "语文"
+    "category": "地理"
   },
   {
     "id": 33,
-    "question": ""床前明月光"是谁写的？",
-    "options": ["杜甫", "李白", "白居易", "王维"],
-    "correct": 1,
-    "category": "语文"
+    "question": "美国国歌的名字是？",
+    "options": [
+      "星条旗永不落",
+      "自由进行曲",
+      "美国进行曲",
+      "战斗进行曲"
+    ],
+    "correct": 0,
+    "category": "音乐"
   },
   {
     "id": 34,
-    "question": "下列哪个词语是错误的？",
-    "options": ["川流不息", "川流不止", "络绎不绝", "源源不断"],
-    "correct": 1,
-    "category": "语文"
+    "question": "美国的货币单位“美元”符号是？",
+    "options": [
+      "$",
+      "€",
+      "£",
+      "¥"
+    ],
+    "correct": 0,
+    "category": "常识"
   },
   {
     "id": 35,
-    "question": ""日"字旁通常与什么有关？",
-    "options": ["水", "火", "太阳时间", "植物"],
-    "correct": 2,
-    "category": "语文"
+    "question": "加拿大的国鸟是？",
+    "options": [
+      "加拿大雁",
+      "白头海雕",
+      "鸽子",
+      "麻雀"
+    ],
+    "correct": 0,
+    "category": "常识"
   },
   {
     "id": 36,
-    "question": "下列哪个字是多音字？",
-    "options": ["山", "水", "行", "人"],
-    "correct": 2,
-    "category": "语文"
+    "question": "美国第一位总统是谁？",
+    "options": [
+      "乔治·华盛顿",
+      "亚伯拉罕·林肯",
+      "托马斯·杰斐逊",
+      "西奥多·罗斯福"
+    ],
+    "correct": 0,
+    "category": "历史"
   },
   {
     "id": 37,
-    "question": ""小荷才露尖尖角"的下一句是？",
-    "options": ["早有蜻蜓立上头", "荷花满池香", "莲叶何田田", "接天莲叶无穷碧"],
-    "correct": 0,
-    "category": "语文"
+    "question": "北美最大的国家是？",
+    "options": [
+      "美国",
+      "加拿大",
+      "墨西哥",
+      "格陵兰"
+    ],
+    "correct": 1,
+    "category": "地理"
   },
   {
     "id": 38,
-    "question": "下列哪个成语用来形容学习勤奋？",
-    "options": ["守株待兔", "凿壁偷光", "画蛇添足", "杯弓蛇影"],
-    "correct": 1,
-    "category": "语文"
+    "question": "美国的国花是什么？",
+    "options": [
+      "玫瑰",
+      "牡丹",
+      "向日葵",
+      "郁金香"
+    ],
+    "correct": 0,
+    "category": "常识"
   },
   {
     "id": 39,
-    "question": ""三人行，必有我师焉"出自哪本书？",
-    "options": ["《论语》", "《孟子》", "《大学》", "《中庸》"],
+    "question": "加拿大的首都渥太华位于哪条河流旁？",
+    "options": [
+      "渥太华河",
+      "圣劳伦斯河",
+      "尼亚加拉河",
+      "密西西比河"
+    ],
     "correct": 0,
-    "category": "语文"
+    "category": "地理"
   },
   {
     "id": 40,
-    "question": "下列哪个字的笔画数最多？",
-    "options": ["火", "水", "木", "土"],
-    "correct": 1,
-    "category": "语文"
+    "question": "美国的独立日是？",
+    "options": [
+      "7月4日",
+      "6月4日",
+      "5月4日",
+      "8月4日"
+    ],
+    "correct": 0,
+    "category": "历史"
   },
   {
     "id": 41,
-    "question": ""红豆生南国"的作者是？",
-    "options": ["李白", "杜甫", "王维", "白居易"],
-    "correct": 2,
-    "category": "语文"
+    "question": "北美自由贸易协定（NAFTA）成员国不包括？",
+    "options": [
+      "加拿大",
+      "美国",
+      "墨西哥",
+      "巴西"
+    ],
+    "correct": 3,
+    "category": "常识"
   },
   {
     "id": 42,
-    "question": "下列哪个词语表示"非常多"？",
-    "options": ["寥寥无几", "数不胜数", "屈指可数", "少之又少"],
-    "correct": 1,
-    "category": "语文"
+    "question": "加拿大的官方语言中不包括？",
+    "options": [
+      "英语",
+      "法语",
+      "西班牙语",
+      "以上都包括"
+    ],
+    "correct": 2,
+    "category": "常识"
   },
   {
     "id": 43,
-    "question": ""山重水复疑无路"的下一句是？",
-    "options": ["柳暗花明又一村", "峰回路转见光明", "绝处逢生有希望", "否极泰来福自来"],
+    "question": "美国的国鸟白头海雕的象征意义是？",
+    "options": [
+      "自由和力量",
+      "和平和友谊",
+      "财富和繁荣",
+      "智慧和勇气"
+    ],
     "correct": 0,
-    "category": "语文"
+    "category": "文化"
   },
   {
     "id": 44,
-    "question": "下列哪个字是象形字？",
-    "options": ["明", "休", "山", "好"],
-    "correct": 2,
-    "category": "语文"
+    "question": "加拿大枫叶旗的颜色主要是？",
+    "options": [
+      "红色和白色",
+      "蓝色和白色",
+      "绿色和黄色",
+      "橙色和黑色"
+    ],
+    "correct": 0,
+    "category": "常识"
   },
   {
     "id": 45,
-    "question": ""举头望明月"的下一句是？",
-    "options": ["低头思故乡", "千里共婵娟", "但愿人长久", "月是故乡明"],
+    "question": "美国国旗上红色条纹的象征是？",
+    "options": [
+      "勇气和坚韧",
+      "和平和友谊",
+      "财富和繁荣",
+      "自由和力量"
+    ],
     "correct": 0,
-    "category": "语文"
+    "category": "文化"
   },
   {
     "id": 46,
-    "question": "下列哪个成语用来形容时间过得很快？",
-    "options": ["度日如年", "光阴似箭", "天长地久", "一刻千金"],
-    "correct": 1,
-    "category": "语文"
+    "question": "北美最大的湖泊是？",
+    "options": [
+      "苏必利尔湖",
+      "密歇根湖",
+      "休伦湖",
+      "伊利湖"
+    ],
+    "correct": 0,
+    "category": "地理"
   },
   {
     "id": 47,
-    "question": ""谁知盘中餐"的下一句是？",
-    "options": ["粒粒皆辛苦", "滴滴汗水换", "来之不容易", "农夫很辛苦"],
+    "question": "加拿大的国石是？",
+    "options": [
+      "翡翠",
+      "石英",
+      "钻石",
+      "玛瑙"
+    ],
     "correct": 0,
-    "category": "语文"
+    "category": "常识"
   },
   {
     "id": 48,
-    "question": "下列哪个词语的意思是"很安静"？",
-    "options": ["热闹非凡", "鸦雀无声", "人声鼎沸", "热火朝天"],
-    "correct": 1,
-    "category": "语文"
+    "question": "美国总统就职典礼通常在哪座建筑前举行？",
+    "options": [
+      "国会大厦",
+      "白宫",
+      "华盛顿纪念碑",
+      "林肯纪念堂"
+    ],
+    "correct": 0,
+    "category": "历史"
   },
   {
     "id": 49,
-    "question": ""桃花潭水深千尺"的下一句是？",
-    "options": ["不及汪伦送我情", "不如此处风景美", "也比不上友谊深", "总比不上母爱深"],
+    "question": "美国有多少个州？",
+    "options": [
+      "50",
+      "48",
+      "51",
+      "52"
+    ],
     "correct": 0,
-    "category": "语文"
+    "category": "地理"
   },
   {
     "id": 50,
-    "question": "下列哪个字的部首是"口"？",
-    "options": ["问", "间", "闯", "闲"],
+    "question": "加拿大最长的河流是？",
+    "options": [
+      "麦肯齐河",
+      "圣劳伦斯河",
+      "尼亚加拉河",
+      "渥太华河"
+    ],
     "correct": 0,
-    "category": "语文"
+    "category": "地理"
   },
   {
     "id": 51,
-    "question": ""白日依山尽"的下一句是？",
-    "options": ["黄河入海流", "长江向东流", "春水向东流", "大河向海流"],
-    "correct": 0,
-    "category": "语文"
+    "question": "北美洲三大国家中人口最少的是？",
+    "options": [
+      "美国",
+      "墨西哥",
+      "加拿大",
+      "古巴"
+    ],
+    "correct": 2,
+    "category": "地理"
   },
   {
     "id": 52,
-    "question": "下列哪个成语用来形容学习进步很快？",
-    "options": ["突飞猛进", "裹足不前", "停滞不前", "原地踏步"],
-    "correct": 0,
-    "category": "语文"
+    "question": "洛杉矶所在的州是？",
+    "options": [
+      "德克萨斯",
+      "加利福尼亚",
+      "佛罗里达",
+      "华盛顿"
+    ],
+    "correct": 1,
+    "category": "地理"
   },
   {
     "id": 53,
-    "question": ""草长莺飞二月天"描写的是哪个季节？",
-    "options": ["春天", "夏天", "秋天", "冬天"],
-    "correct": 0,
-    "category": "语文"
+    "question": "美墨边境著名的围栏被称为？",
+    "options": [
+      "自由墙",
+      "防御墙",
+      "边境墙",
+      "墨西哥屏障"
+    ],
+    "correct": 2,
+    "category": "常识"
   },
   {
     "id": 54,
-    "question": "下列哪个字是会意字？",
-    "options": ["山", "水", "明", "人"],
-    "correct": 2,
-    "category": "语文"
+    "question": "美墨边境著名的围栏被称为？",
+    "options": [
+      "边境墙",
+      "防御墙",
+      "自由墙",
+      "墨西哥屏障"
+    ],
+    "correct": 0,
+    "category": "常识"
   },
   {
     "id": 55,
-    "question": ""欲穷千里目"的下一句是？",
-    "options": ["更上一层楼", "还需努力攀", "须登最高峰", "要爬更高山"],
+    "question": "加拿大的国旗上是什么植物？",
+    "options": [
+      "枫叶",
+      "松叶",
+      "白桦叶",
+      "橡叶"
+    ],
     "correct": 0,
-    "category": "语文"
+    "category": "文化"
   },
   {
     "id": 56,
-    "question": "下列哪个词语表示"非常高兴"？",
-    "options": ["愁眉苦脸", "兴高采烈", "垂头丧气", "闷闷不乐"],
+    "question": "下列哪一个城市是美国首都？",
+    "options": [
+      "纽约",
+      "华盛顿特区",
+      "芝加哥",
+      "洛杉矶"
+    ],
     "correct": 1,
-    "category": "语文"
+    "category": "地理"
   },
   {
     "id": 57,
-    "question": ""静夜思"是哪位诗人的作品？",
-    "options": ["杜甫", "李白", "王维", "白居易"],
-    "correct": 1,
-    "category": "语文"
+    "question": "加拿大的国庆日是哪一天？",
+    "options": [
+      "7月1日",
+      "6月1日",
+      "5月1日",
+      "8月1日"
+    ],
+    "correct": 0,
+    "category": "常识"
   },
   {
     "id": 58,
-    "question": "下列哪个成语用来形容东西很珍贵？",
-    "options": ["一文不值", "价值连城", "分文不取", "不值一提"],
-    "correct": 1,
-    "category": "语文"
+    "question": "魁北克省的主要语言是？",
+    "options": [
+      "英语",
+      "西班牙语",
+      "法语",
+      "德语"
+    ],
+    "correct": 2,
+    "category": "地理"
   },
   {
     "id": 59,
-    "question": ""千里之行"的下一句是？",
-    "options": ["始于足下", "靠双脚走", "要有准备", "需要坚持"],
-    "correct": 0,
-    "category": "语文"
+    "question": "美国共有多少个州？",
+    "options": [
+      "48",
+      "49",
+      "50",
+      "52"
+    ],
+    "correct": 2,
+    "category": "地理"
   },
   {
     "id": 60,
-    "question": "下列哪个字的声调是第三声？",
-    "options": ["妈", "麻", "马", "骂"],
-    "correct": 2,
-    "category": "语文"
+    "question": "哪一年美国宣布独立？",
+    "options": [
+      "1776年",
+      "1789年",
+      "1801年",
+      "1754年"
+    ],
+    "correct": 0,
+    "category": "历史"
   },
-
-  // 小学英语题 (61-100)
   {
     "id": 61,
-    "question": "苹果用英语怎么说？",
-    "options": ["Orange", "Apple", "Banana", "Grape"],
-    "correct": 1,
-    "category": "英语"
+    "question": "加拿大最西部的省是？",
+    "options": [
+      "不列颠哥伦比亚",
+      "艾伯塔",
+      "马尼托巴",
+      "纽芬兰"
+    ],
+    "correct": 0,
+    "category": "地理"
   },
   {
     "id": 62,
-    "question": ""Hello"的中文意思是？",
-    "options": ["再见", "你好", "谢谢", "对不起"],
-    "correct": 1,
-    "category": "英语"
+    "question": "美国的国家语言是？",
+    "options": [
+      "英语",
+      "英语和西班牙语",
+      "没有官方语言",
+      "英语和法语"
+    ],
+    "correct": 2,
+    "category": "地理"
   },
   {
     "id": 63,
-    "question": "数字"3"用英语怎么说？",
-    "options": ["Two", "Three", "Four", "Five"],
+    "question": "加拿大国会所在地是？",
+    "options": [
+      "温哥华",
+      "渥太华",
+      "多伦多",
+      "蒙特利尔"
+    ],
     "correct": 1,
-    "category": "英语"
+    "category": "政治"
   },
   {
     "id": 64,
-    "question": ""红色"用英语怎么说？",
-    "options": ["Blue", "Green", "Red", "Yellow"],
-    "correct": 2,
-    "category": "英语"
+    "question": "墨西哥首都是哪一座城市？",
+    "options": [
+      "瓜达拉哈拉",
+      "墨西哥城",
+      "提华纳",
+      "坎昆"
+    ],
+    "correct": 1,
+    "category": "地理"
   },
   {
     "id": 65,
-    "question": ""Cat"的中文意思是？",
-    "options": ["狗", "猫", "鸟", "鱼"],
-    "correct": 1,
-    "category": "英语"
+    "question": "美国国旗有多少颗星？",
+    "options": [
+      "48",
+      "49",
+      "50",
+      "52"
+    ],
+    "correct": 2,
+    "category": "文化"
   },
   {
     "id": 66,
-    "question": ""Thank you"的中文意思是？",
-    "options": ["不客气", "对不起", "谢谢", "再见"],
-    "correct": 2,
-    "category": "英语"
+    "question": "北美大陆上的最高山峰是？",
+    "options": [
+      "麦金利山（丹纳利峰）",
+      "落基山",
+      "阿巴拉契亚山",
+      "圣海伦斯火山"
+    ],
+    "correct": 0,
+    "category": "地理"
   },
   {
     "id": 67,
-    "question": "数字"10"用英语怎么说？",
-    "options": ["Nine", "Ten", "Eleven", "Twelve"],
-    "correct": 1,
-    "category": "英语"
+    "question": "下列哪座城市以电影工业闻名？",
+    "options": [
+      "纽约",
+      "波士顿",
+      "洛杉矶",
+      "迈阿密"
+    ],
+    "correct": 2,
+    "category": "地理"
   },
   {
     "id": 68,
-    "question": ""Book"的中文意思是？",
-    "options": ["笔", "书", "桌子", "椅子"],
-    "correct": 1,
-    "category": "英语"
+    "question": "安大略湖位于哪个国家？",
+    "options": [
+      "美国",
+      "加拿大",
+      "美国和加拿大",
+      "墨西哥"
+    ],
+    "correct": 2,
+    "category": "地理"
   },
   {
     "id": 69,
-    "question": ""Good morning"的中文意思是？",
-    "options": ["晚上好", "下午好", "早上好", "晚安"],
-    "correct": 2,
-    "category": "英语"
+    "question": "加拿大的货币单位是？",
+    "options": [
+      "加元",
+      "美元",
+      "英镑",
+      "欧元"
+    ],
+    "correct": 0,
+    "category": "常识"
   },
   {
     "id": 70,
-    "question": ""水"用英语怎么说？",
-    "options": ["Milk", "Juice", "Water", "Tea"],
-    "correct": 2,
-    "category": "英语"
+    "question": "美国的第一任总统是谁？",
+    "options": [
+      "乔治·华盛顿",
+      "托马斯·杰斐逊",
+      "林肯",
+      "富兰克林"
+    ],
+    "correct": 0,
+    "category": "历史"
   },
   {
     "id": 71,
-    "question": ""Dog"的中文意思是？",
-    "options": ["猫", "狗", "兔子", "鸟"],
-    "correct": 1,
-    "category": "英语"
+    "question": "下列哪座城市不在美国？",
+    "options": [
+      "温哥华",
+      "洛杉矶",
+      "西雅图",
+      "丹佛"
+    ],
+    "correct": 0,
+    "category": "地理"
   },
   {
     "id": 72,
-    "question": ""蓝色"用英语怎么说？",
-    "options": ["Red", "Blue", "Green", "Yellow"],
-    "correct": 1,
-    "category": "英语"
+    "question": "美国国徽上的鸟是什么？",
+    "options": [
+      "白头鹰",
+      "金雕",
+      "红隼",
+      "秃鹰"
+    ],
+    "correct": 0,
+    "category": "常识"
   },
   {
     "id": 73,
-    "question": ""Yes"的中文意思是？",
-    "options": ["不", "是的", "也许", "当然"],
-    "correct": 1,
-    "category": "英语"
+    "question": "哪条河流贯穿美国中部？",
+    "options": [
+      "密西西比河",
+      "哈德逊河",
+      "科罗拉多河",
+      "圣劳伦斯河"
+    ],
+    "correct": 0,
+    "category": "地理"
   },
   {
     "id": 74,
-    "question": "数字"7"用英语怎么说？",
-    "options": ["Six", "Seven", "Eight", "Nine"],
-    "correct": 1,
-    "category": "英语"
+    "question": "多伦多位于哪一个湖？",
+    "options": [
+      "安大略湖",
+      "伊利湖",
+      "密歇根湖",
+      "苏必利尔湖"
+    ],
+    "correct": 0,
+    "category": "地理"
   },
   {
     "id": 75,
-    "question": ""School"的中文意思是？",
-    "options": ["家", "学校", "商店", "医院"],
-    "correct": 1,
-    "category": "英语"
+    "question": "下列哪个国家属于北美洲？",
+    "options": [
+      "加拿大",
+      "巴西",
+      "哥伦比亚",
+      "秘鲁"
+    ],
+    "correct": 0,
+    "category": "地理"
   },
   {
     "id": 76,
-    "question": ""Goodbye"的中文意思是？",
-    "options": ["你好", "再见", "谢谢", "对不起"],
-    "correct": 1,
-    "category": "英语"
+    "question": "美国最高法院设在哪座城市？",
+    "options": [
+      "纽约",
+      "芝加哥",
+      "华盛顿特区",
+      "洛杉矶"
+    ],
+    "correct": 2,
+    "category": "地理"
   },
   {
     "id": 77,
-    "question": ""绿色"用英语怎么说？",
-    "options": ["Red", "Blue", "Green", "Purple"],
-    "correct": 2,
-    "category": "英语"
+    "question": "以下哪个是加拿大城市？",
+    "options": [
+      "蒙特利尔",
+      "奥斯汀",
+      "底特律",
+      "巴尔的摩"
+    ],
+    "correct": 0,
+    "category": "地理"
   },
   {
     "id": 78,
-    "question": ""Happy"的中文意思是？",
-    "options": ["难过", "生气", "高兴", "害怕"],
-    "correct": 2,
-    "category": "英语"
+    "question": "美国的自由女神像是谁赠送的？",
+    "options": [
+      "英国",
+      "法国",
+      "加拿大",
+      "意大利"
+    ],
+    "correct": 1,
+    "category": "常识"
   },
   {
     "id": 79,
-    "question": "数字"5"用英语怎么说？",
-    "options": ["Four", "Five", "Six", "Seven"],
-    "correct": 1,
-    "category": "英语"
+    "question": "美国的两大主要政党是？",
+    "options": [
+      "共和党和民主党",
+      "保守党和自由党",
+      "绿党和工党",
+      "自由党和新民主党"
+    ],
+    "correct": 0,
+    "category": "政治"
   },
   {
     "id": 80,
-    "question": ""Teacher"的中文意思是？",
-    "options": ["学生", "老师", "医生", "警察"],
-    "correct": 1,
-    "category": "英语"
+    "question": "哪一座城市有CN塔？",
+    "options": [
+      "渥太华",
+      "卡尔加里",
+      "温哥华",
+      "多伦多"
+    ],
+    "correct": 3,
+    "category": "地理"
   },
   {
     "id": 81,
-    "question": ""No"的中文意思是？",
-    "options": ["是的", "不", "也许", "当然"],
-    "correct": 1,
-    "category": "英语"
+    "question": "哪条河是加拿大的主要河流？",
+    "options": [
+      "圣劳伦斯河",
+      "密西西比河",
+      "哥伦比亚河",
+      "科罗拉多河"
+    ],
+    "correct": 0,
+    "category": "地理"
   },
   {
     "id": 82,
-    "question": ""黄色"用英语怎么说？",
-    "options": ["Red", "Blue", "Green", "Yellow"],
-    "correct": 3,
-    "category": "英语"
+    "question": "美加边境最长的省是？",
+    "options": [
+      "魁北克",
+      "安大略",
+      "卑诗",
+      "新斯科舍"
+    ],
+    "correct": 2,
+    "category": "地理"
   },
   {
     "id": 83,
-    "question": ""Bird"的中文意思是？",
-    "options": ["鱼", "鸟", "兔子", "老鼠"],
-    "correct": 1,
-    "category": "英语"
+    "question": "美国著名的赌城是？",
+    "options": [
+      "迈阿密",
+      "洛杉矶",
+      "拉斯维加斯",
+      "芝加哥"
+    ],
+    "correct": 2,
+    "category": "常识"
   },
   {
     "id": 84,
-    "question": "数字"1"用英语怎么说？",
-    "options": ["One", "Two", "Three", "Four"],
+    "question": "加拿大的官方语言是？",
+    "options": [
+      "英语和法语",
+      "英语",
+      "法语",
+      "英语和德语"
+    ],
     "correct": 0,
-    "category": "英语"
+    "category": "常识"
   },
   {
     "id": 85,
-    "question": ""Family"的中文意思是？",
-    "options": ["朋友", "家庭", "同学", "邻居"],
-    "correct": 1,
-    "category": "英语"
+    "question": "加拿大的枫叶旗是哪一年启用的？",
+    "options": [
+      "1965年",
+      "1867年",
+      "1901年",
+      "1982年"
+    ],
+    "correct": 0,
+    "category": "历史"
   },
   {
     "id": 86,
-    "question": ""Good night"的中文意思是？",
-    "options": ["早上好", "下午好", "晚上好", "晚安"],
-    "correct": 3,
-    "category": "英语"
+    "question": "美国五大湖中唯一完全位于美国的是？",
+    "options": [
+      "伊利湖",
+      "密歇根湖",
+      "苏必利尔湖",
+      "安大略湖"
+    ],
+    "correct": 1,
+    "category": "地理"
   },
   {
     "id": 87,
-    "question": ""牛奶"用英语怎么说？",
-    "options": ["Water", "Juice", "Milk", "Coffee"],
-    "correct": 2,
-    "category": "英语"
+    "question": "加拿大第一大岛屿是？",
+    "options": [
+      "巴芬岛",
+      "维多利亚岛",
+      "纽芬兰岛",
+      "爱德华王子岛"
+    ],
+    "correct": 0,
+    "category": "常识"
   },
   {
     "id": 88,
-    "question": ""Big"的中文意思是？",
-    "options": ["小", "大", "高", "矮"],
-    "correct": 1,
-    "category": "英语"
+    "question": "美国的独立战争主要对抗哪个国家？",
+    "options": [
+      "法国",
+      "西班牙",
+      "英国",
+      "荷兰"
+    ],
+    "correct": 2,
+    "category": "地理"
   },
   {
     "id": 89,
-    "question": "数字"8"用英语怎么说？",
-    "options": ["Seven", "Eight", "Nine", "Ten"],
-    "correct": 1,
-    "category": "英语"
+    "question": "纽约证券交易所位于哪条街？",
+    "options": [
+      "第五大道",
+      "百老汇",
+      "华尔街",
+      "第七大道"
+    ],
+    "correct": 2,
+    "category": "常识"
   },
   {
     "id": 90,
-    "question": ""Friend"的中文意思是？",
-    "options": ["敌人", "朋友", "陌生人", "老师"],
-    "correct": 1,
-    "category": "英语"
-  },
-  {
-    "id": 91,
-    "question": ""黑色"用英语怎么说？",
-    "options": ["White", "Black", "Gray", "Brown"],
-    "correct": 1,
-    "category": "英语"
-  },
-  {
-    "id": 92,
-    "question": ""Small"的中文意思是？",
-    "options": ["大", "小", "长", "短"],
-    "correct": 1,
-    "category": "英语"
-  },
-  {
-    "id": 93,
-    "question": "数字"6"用英语怎么说？",
-    "options": ["Five", "Six", "Seven", "Eight"],
-    "correct": 1,
-    "category": "英语"
-  },
-  {
-    "id": 94,
-    "question": ""House"的中文意思是？",
-    "options": ["车", "房子", "船", "飞机"],
-    "correct": 1,
-    "category": "英语"
-  },
-  {
-    "id": 95,
-    "question": ""白色"用英语怎么说？",
-    "options": ["Black", "White", "Gray", "Brown"],
-    "correct": 1,
-    "category": "英语"
-  },
-  {
-    "id": 96,
-    "question": ""Love"的中文意思是？",
-    "options": ["恨", "爱", "怕", "喜欢"],
-    "correct": 1,
-    "category": "英语"
-  },
-  {
-    "id": 97,
-    "question": "数字"9"用英语怎么说？",
-    "options": ["Eight", "Nine", "Ten", "Eleven"],
-    "correct": 1,
-    "category": "英语"
-  },
-  {
-    "id": 98,
-    "question": ""Fish"的中文意思是？",
-    "options": ["鸟", "狗", "鱼", "猫"],
-    "correct": 2,
-    "category": "英语"
-  },
-  {
-    "id": 99,
-    "question": ""Please"的中文意思是？",
-    "options": ["谢谢", "请", "对不起", "不客气"],
-    "correct": 1,
-    "category": "英语"
-  },
-  {
-    "id": 100,
-    "question": "数字"4"用英语怎么说？",
-    "options": ["Three", "Four", "Five", "Six"],
-    "correct": 1,
-    "category": "英语"
-  },    "question": "中国的第一大河是？",
+    "question": "北美洲地理上与南美洲连接的地方是？",
     "options": [
-      "长江",
-      "黄河",
-      "珠江",
-      "松花江"
+      "巴拿马地峡",
+      "墨西哥湾",
+      "尤卡坦半岛",
+      "危地马拉高原"
     ],
     "correct": 0,
     "category": "地理"
   },
   {
-    "id": 255,
-    "question": "中国人口最多的省份是？",
+    "id": 91,
+    "question": "加拿大建国于哪一年？",
     "options": [
-      "江苏",
-      "广东",
-      "山东",
-      "河南"
+      "1867年",
+      "1776年",
+      "1901年",
+      "1945年"
+    ],
+    "correct": 0,
+    "category": "历史"
+  },
+  {
+    "id": 92,
+    "question": "以下哪一个是墨西哥的著名旅游城市？",
+    "options": [
+      "提华纳",
+      "坎昆",
+      "瓜达拉哈拉",
+      "墨西哥城"
     ],
     "correct": 1,
     "category": "地理"
   },
   {
-    "id": 256,
-    "question": "“鱼米之乡”主要指？",
+    "id": 93,
+    "question": "美国第一任总统乔治·华盛顿出生在哪个州？",
     "options": [
-      "长江中下游平原",
-      "黄土高原",
-      "云贵高原",
-      "东北平原"
+      "弗吉尼亚",
+      "宾夕法尼亚",
+      "马萨诸塞",
+      "纽约"
     ],
+    "correct": 0,
+    "category": "地理"
+  },
+  {
+    "id": 94,
+    "question": "五大湖中最大的是哪一个？",
+    "options": [
+      "密歇根湖",
+      "伊利湖",
+      "安大略湖",
+      "苏必利尔湖"
+    ],
+    "correct": 3,
+    "category": "地理"
+  },
+  {
+    "id": 95,
+    "question": "北美洲的面积大约是多少？",
+    "options": [
+      "2400万平方公里",
+      "1900万平方公里",
+      "1000万平方公里",
+      "3000万平方公里"
+    ],
+    "correct": 0,
+    "category": "地理"
+  },
+  {
+    "id": 96,
+    "question": "以下哪个节日是美国的法定假日？",
+    "options": [
+      "感恩节",
+      "中秋节",
+      "复活节",
+      "国际劳动节"
+    ],
+    "correct": 0,
+    "category": "文化"
+  },
+  {
+    "id": 97,
+    "question": "美国的国会由哪两部分组成？",
+    "options": [
+      "参议院和众议院",
+      "总统和最高法院",
+      "州议会和联邦议会",
+      "地方议会和中央议会"
+    ],
+    "correct": 0,
+    "category": "政治"
+  },
+  {
+    "id": 98,
+    "question": "加拿大是在哪个女王统治时期成立联邦的？",
+    "options": [
+      "维多利亚女王",
+      "伊丽莎白一世",
+      "伊丽莎白二世",
+      "安妮女王"
+    ],
+    "correct": 0,
+    "category": "常识"
+  },
+  {
+    "id": 99,
+    "question": "美国的建国文件《独立宣言》签署于哪年？",
+    "options": [
+      "1776年",
+      "1789年",
+      "1801年",
+      "1754年"
+    ],
+    "correct": 0,
+    "category": "历史"
+  },
+  {
+    "id": 100,
+    "question": "加拿大的官方君主是哪国的国家元首？",
+    "options": [
+      "英国",
+      "法国",
+      "加拿大本国",
+      "澳大利亚"
+    ],
+    "correct": 0,
+    "category": "地理"
+  },
+  {
     "id": 101,
     "question": "若 x + 3 = 8，则 x 等于？",
     "options": [

@@ -167,7 +167,7 @@
                 const res = await fetch('/api/quiz/next', {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ username, seen: seenIds })
+                    body: JSON.stringify({ username, seen: seenIds, questionIndex: currentIndex })
                 });
                 
                 const data = await res.json();
@@ -262,31 +262,36 @@
                     let pointsText = "";
                     let color = "#f39c12";
                     
-                    // 新积分规则
-                    if (score < 2) { 
+                    // 新积分规则 - 适应降低的题目难度
+                    if (score <= 2) { 
                         points = -20; 
                         pointsText = "扣20元"; 
                         color = "#e74c3c"; 
                     }
-                    else if (score < 4) { 
+                    else if (score <= 4) { 
                         points = -10; 
                         pointsText = "扣10元"; 
                         color = "#e67e22"; 
                     }
-                    else if (score >= 5 && score <= 6) { 
+                    else if (score === 5) { 
+                        points = 0; 
+                        pointsText = "0元"; 
+                        color = "#95a5a6"; 
+                    }
+                    else if (score <= 7) { 
                         points = +10; 
                         pointsText = "加10元"; 
                         color = "#3498db"; 
                     }
-                    else if (score >= 7) { 
+                    else if (score <= 9) { 
                         points = +20; 
                         pointsText = "加20元"; 
                         color = "#27ae60"; 
                     }
                     else { 
-                        points = 0; 
-                        pointsText = "0元"; 
-                        color = "#95a5a6"; 
+                        points = +30; 
+                        pointsText = "加30元"; 
+                        color = "#2ecc71"; 
                     }
                     
                     resultDiv.innerHTML = `
@@ -298,7 +303,7 @@
                             </div>
                             <div style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 10px; color: #333;">
                                 <p><strong>积分规则：</strong></p>
-                                <p>小于2分扣20元 | 小于4分扣10元 | 5-6分加10元 | 7分以上加20元</p>
+                                <p>0-2分扣20元 | 3-4分扣10元 | 5分0元 | 6-7分加10元 | 8-9分加20元 | 10分以上加30元</p>
                             </div>
                             <div style="margin-top: 30px;">
                                 <button onclick="location.reload()" style="margin: 10px; background: #3498db; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer;">再挑战一次</button>
