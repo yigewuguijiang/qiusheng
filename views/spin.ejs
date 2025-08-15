@@ -188,12 +188,9 @@
         
         <div id="result" style="margin-top: 20px; font-size: 1.2rem; min-height: 40px;"></div>
         
-        <div id="countdown-timer" style="display: none; margin-top: 20px; padding: 20px; background: #fff3cd; border: 2px solid #ffc107; border-radius: 10px;">
-            <h3 style="color: #856404; margin: 0 0 10px 0;">⏰ 任务倒计时</h3>
-            <div id="countdown-display" style="font-size: 2rem; font-weight: bold; color: #dc3545;"></div>
-            <p style="margin: 10px 0; color: #856404;">请在5分钟内找到路人完成任务，否则判定失败！</p>
-            <button onclick="stopCountdown(true)" style="background: #28a745; margin-right: 10px;">✅ 已完成</button>
-            <button onclick="stopCountdown(false)" style="background: #dc3545;">❌ 放弃任务</button>
+        <div id="countdown-timer" style="display: none; margin-top: 20px; padding: 15px; background: #fff3cd; border: 2px solid #ffc107; border-radius: 10px;">
+            <h3 style="color: #856404; margin: 0 0 10px 0;">⏰ 路人任务倒计时</h3>
+            <div id="countdown-display" style="font-size: 2rem; font-weight: bold; color: #dc3545; text-align: center;"></div>
         </div>
         
         <div class="challenge-rules">
@@ -264,7 +261,9 @@
             canvas.style.width = size + 'px';
             canvas.style.height = size + 'px';
             
-            // 缩放Canvas绘制上下文
+            // 重置变换矩阵，避免累积缩放
+            ctx.setTransform(1, 0, 0, 1, 0, 0);
+            // 只设置一次缩放
             ctx.scale(dpr, dpr);
         }
         
@@ -315,6 +314,9 @@
         async function spin() {
             const button = document.getElementById('spinButton');
             const resultDiv = document.getElementById('result');
+            
+            // 清除之前的倒计时
+            hideCountdown();
             
             // 防止重复点击
             button.disabled = true;
@@ -429,8 +431,7 @@
                 displayDiv.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
                 
                 if (remaining <= 0) {
-                    stopCountdown(false);
-                    alert('⏰ 时间到！任务失败 -20元');
+                    hideCountdown();
                 }
                 
                 // 最后30秒变红色闪烁
@@ -440,8 +441,8 @@
             }, 100);
         }
         
-        // 停止倒计时
-        function stopCountdown(success) {
+        // 隐藏倒计时
+        function hideCountdown() {
             if (countdownInterval) {
                 clearInterval(countdownInterval);
                 countdownInterval = null;
@@ -452,12 +453,6 @@
             
             timerDiv.style.display = 'none';
             displayDiv.style.animation = 'none';
-            
-            if (success) {
-                alert('🎉 任务完成！请根据挑战规则结算金额');
-            } else {
-                alert('❌ 任务失败！-20元');
-            }
         }
     </script>
 </body>

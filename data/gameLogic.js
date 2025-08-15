@@ -180,9 +180,9 @@ class GameLogic {
             }
             
             // 计算角度
-            const segmentAngle = 360 / this.challenges.length;
+            const segmentAngle = 360 / this.challenges.length;  // 20个任务，每个18度
             const centerAngle = challengeIndex * segmentAngle + segmentAngle / 2;
-            const randomOffset = GameLogic.randomInt(-10, 10);
+            const randomOffset = GameLogic.randomInt(-6, 6);  // ±6度偏移，确保在扇形内
             const angle = (centerAngle + randomOffset) % 360;
             
             return {
