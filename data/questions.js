@@ -263,14 +263,14 @@ const questions = [
   },
   {
     "id": 38,
-    "question": "下列哪个成语用来形容学习勤奋？",
+    "question": "形容学习勤奋的成语是？",
     "options": ["守株待兔", "凿壁偷光", "画蛇添足", "杯弓蛇影"],
     "correct": 1,
     "category": "语文"
   },
   {
     "id": 39,
-    "question": "\"三人行，必有我师焉\"出自哪本书？",
+    "question": "\"三人行，必有我师焉\"的出处是？",
     "options": ["《论语》", "《孟子》", "《大学》", "《中庸》"],
     "correct": 0,
     "category": "语文"
@@ -319,7 +319,7 @@ const questions = [
   },
   {
     "id": 46,
-    "question": "下列哪个成语用来形容时间过得很快？",
+    "question": "形容时间过得很快的成语是？",
     "options": ["度日如年", "光阴似箭", "天长地久", "一刻千金"],
     "correct": 1,
     "category": "语文"
@@ -361,7 +361,7 @@ const questions = [
   },
   {
     "id": 52,
-    "question": "下列哪个成语用来形容学习进步很快？",
+    "question": "形容学习进步很快的成语是？",
     "options": ["突飞猛进", "裹足不前", "停滞不前", "原地踏步"],
     "correct": 0,
     "category": "语文"
@@ -403,7 +403,7 @@ const questions = [
   },
   {
     "id": 58,
-    "question": "下列哪个成语用来形容东西很珍贵？",
+    "question": "形容东西很珍贵的成语是？",
     "options": ["一文不值", "价值连城", "分文不取", "不值一提"],
     "correct": 1,
     "category": "语文"
@@ -840,7 +840,7 @@ const questions = [
     "id": 112,
     "question": "最大公因数是？",
     "options": [
-      "能整除多个数的最大数",
+      "最大公约数",
       "两个数的平均值",
       "所有因数的和",
       "最大整数"
@@ -850,7 +850,7 @@ const questions = [
   },
   {
     "id": 113,
-    "question": "一辆车以60千米/小时的速度行驶3小时，行驶了多少千米？",
+    "question": "60千米/小时行驶3小时，行驶多少千米？",
     "options": [
       "60",
       "90",
@@ -970,7 +970,7 @@ const questions = [
   },
   {
     "id": 123,
-    "question": "一元二次方程 ax² + bx + c = 0 的根的判别式是？",
+    "question": "ax²+bx+c=0的判别式是？",
     "options": [
       "b² - 4ac",
       "a² - 4bc",
@@ -2170,7 +2170,7 @@ const questions = [
   },
   {
     "id": 223,
-    "question": "Mount Everest is the ___ mountain in the world.",
+    "question": "Mount Everest is the ___ mountain.",
     "options": [
       "tallest",
       "most tall",
@@ -2386,7 +2386,7 @@ const questions = [
   },
   {
     "id": 241,
-    "question": "There ___ a book and two pens on the desk.",
+    "question": "There ___ a book on the desk.",
     "options": [
       "is",
       "are",
@@ -2470,7 +2470,7 @@ const questions = [
   },
   {
     "id": 248,
-    "question": "The students stopped ___ when the teacher came in.",
+    "question": "The students stopped ___ .",
     "options": [
       "talking",
       "talk",

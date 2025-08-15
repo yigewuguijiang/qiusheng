@@ -179,14 +179,53 @@ class GameLogic {
             '转盘次数+2'
         ],
         
+        // 权重数组：Quiz权重为3，其他为1
+        weights: [
+            1, // 2元买吃的
+            3, // Quiz (3倍概率)
+            1, // Scratch
+            1, // Slot
+            1, // 集体10个深蹲
+            1, // 和路人美女要微信
+            1, // 和路人美女合照
+            1, // 给路人吉他唱歌打分
+            1, // 集体热舞1分钟
+            1, // 集体10个俯卧撑
+            1, // 公主抱下蹲5个
+            1, // 要路人帅哥微信
+            1, // 找路人要吃的
+            1, // 和路人音准比拼
+            1, // 和路人歌手battle
+            1, // 找路人妹妹合唱
+            1, // 回答队友真心话
+            1, // 连续夸赞路人美女30秒
+            1, // 人群中大声清唱10秒
+            1  // 转盘次数+2
+        ],
+        
         names: ['乌龟', '麻瓜', '大彪'],
         
         // 集体任务不需要加名字
         groupTasks: ['集体10个深蹲', '集体热舞1分钟', '集体10个俯卧撑', '公主抱下蹲5个', '转盘次数+2'],
 
+        // 根据权重随机选择挑战
+        getWeightedRandomChallenge() {
+            const totalWeight = this.weights.reduce((sum, weight) => sum + weight, 0);
+            let random = Math.random() * totalWeight;
+            
+            for (let i = 0; i < this.weights.length; i++) {
+                random -= this.weights[i];
+                if (random <= 0) {
+                    return i;
+                }
+            }
+            return 0; // fallback
+        },
+
         spin() {
-            const challengeIndex = GameLogic.randomInt(0, this.challenges.length - 1);
-            let challenge = this.challenges[challengeIndex];
+            // 使用权重随机选择实际的挑战
+            const actualChallengeIndex = this.getWeightedRandomChallenge();
+            let challenge = this.challenges[actualChallengeIndex];
             
             // 如果不是集体任务，随机加上一个人名
             if (!this.groupTasks.includes(challenge)) {
@@ -194,9 +233,9 @@ class GameLogic {
                 challenge = `${randomName}: ${challenge}`;
             }
             
-            // 计算角度
+            // 计算显示角度（基于实际选择的挑战）
             const segmentAngle = 360 / this.challenges.length;  // 20个任务，每个18度
-            const centerAngle = challengeIndex * segmentAngle + segmentAngle / 2;
+            const centerAngle = actualChallengeIndex * segmentAngle + segmentAngle / 2;
             const randomOffset = GameLogic.randomInt(-6, 6);  // ±6度偏移，确保在扇形内
             const angle = (centerAngle + randomOffset) % 360;
             
