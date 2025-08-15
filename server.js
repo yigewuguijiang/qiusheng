@@ -120,11 +120,15 @@ app.post('/api/quiz/submit', (req, res) => {
                 if (question && GameLogic.quiz.validateAnswer(question, answer.answerIndex)) {
                     correctCount++;
                 }
+            } else {
+                console.warn(`Missing session data for token: ${answer.token}, user: ${username}`);
             }
         }
         
-        // 清理用户会话
-        userSessions.delete(username);
+        // 只有在成功验证答案后才清理用户会话
+        if (Object.keys(userSession).length > 0) {
+            userSessions.delete(username);
+        }
         
         res.json({
             success: true,
