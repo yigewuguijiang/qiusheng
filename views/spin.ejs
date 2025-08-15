@@ -61,6 +61,11 @@
                 margin: 0;
                 padding: 0;
             }
+            
+            @keyframes blink {
+                0%, 50% { opacity: 1; }
+                51%, 100% { opacity: 0.3; }
+            }
         }
         #spinButton {
             padding: 15px 30px;
@@ -183,6 +188,14 @@
         
         <div id="result" style="margin-top: 20px; font-size: 1.2rem; min-height: 40px;"></div>
         
+        <div id="countdown-timer" style="display: none; margin-top: 20px; padding: 20px; background: #fff3cd; border: 2px solid #ffc107; border-radius: 10px;">
+            <h3 style="color: #856404; margin: 0 0 10px 0;">⏰ 任务倒计时</h3>
+            <div id="countdown-display" style="font-size: 2rem; font-weight: bold; color: #dc3545;"></div>
+            <p style="margin: 10px 0; color: #856404;">请在5分钟内找到路人完成任务，否则判定失败！</p>
+            <button onclick="stopCountdown(true)" style="background: #28a745; margin-right: 10px;">✅ 已完成</button>
+            <button onclick="stopCountdown(false)" style="background: #dc3545;">❌ 放弃任务</button>
+        </div>
+        
         <div class="challenge-rules">
             <h3>💰 挑战金额规则</h3>
             <div class="rules-container">
@@ -203,6 +216,22 @@
 
     <script>
         const username = "<%= username %>";
+        
+        // 路人相关任务列表
+        const passerbyTasks = [
+            '和路人美女要微信',
+            '和路人美女合照',
+            '给路人吉他唱歌打分',
+            '要路人帅哥微信',
+            '找路人要吃的',
+            '和路人音准比拼',
+            '和路人歌手battle',
+            '找路人妹妹合唱',
+            '连续夸赞路人美女30秒'
+        ];
+        
+        let countdownInterval = null;
+        let countdownEndTime = null;
         
         // 挑战任务和颜色 - 生存直播版
         const challenges = [
@@ -334,12 +363,44 @@
                     if (t < 1) {
                         requestAnimationFrame(animate);
                     } else {
-                        resultDiv.innerHTML = `
+                        let displayContent = `
                             <div style="color: #28a745; font-weight: bold; text-align: center; font-size: 1.2rem; padding: 15px; background: #f8f9fa; border-radius: 10px; margin-top: 20px;">
                                 ${data.prize}
                             </div>
                         `;
+                        
+                        // 特殊任务额外显示
+                        const prizeText = data.prize;
+                        
+                        // 歌手battle特殊显示
+                        if (prizeText.includes('和路人歌手battle')) {
+                            const singers = ['周杰伦', '林俊杰', '王力宏', '陶喆', '邓紫棋', '孙燕姿', '张惠妹', '梁静茹'];
+                            const randomSinger = singers[Math.floor(Math.random() * singers.length)];
+                            displayContent += `
+                                <div style="color: #28a745; font-size: 1.1rem; margin-top: 10px; padding: 10px; background: #d4edda; border-radius: 8px;">
+                                    任务：轮流演唱【${randomSinger}】歌曲
+                                </div>
+                            `;
+                        }
+                        
+                        // 音准比拼特殊显示
+                        if (prizeText.includes('和路人音准比拼')) {
+                            displayContent += `
+                                <div style="color: #28a745; font-size: 1.1rem; margin-top: 10px; padding: 10px; background: #d4edda; border-radius: 8px;">
+                                    任务：全民K歌演唱同一首歌半首，看分数高低
+                                </div>
+                            `;
+                        }
+                        
+                        resultDiv.innerHTML = displayContent;
                         button.disabled = false;
+                        
+                        // 检查是否是路人相关任务
+                        const isPasserbyTask = passerbyTasks.some(task => prizeText.includes(task));
+                        
+                        if (isPasserbyTask) {
+                            startCountdown();
+                        }
                     }
                 }
                 
@@ -349,6 +410,53 @@
                 resultDiv.textContent = "❌ 网络错误，请重试";
                 button.disabled = false;
                 console.error('Error:', error);
+            }
+        }
+        
+        // 开始倒计时
+        function startCountdown() {
+            const timerDiv = document.getElementById('countdown-timer');
+            const displayDiv = document.getElementById('countdown-display');
+            
+            timerDiv.style.display = 'block';
+            countdownEndTime = Date.now() + 5 * 60 * 1000; // 5分钟
+            
+            countdownInterval = setInterval(() => {
+                const remaining = Math.max(0, countdownEndTime - Date.now());
+                const minutes = Math.floor(remaining / 60000);
+                const seconds = Math.floor((remaining % 60000) / 1000);
+                
+                displayDiv.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                
+                if (remaining <= 0) {
+                    stopCountdown(false);
+                    alert('⏰ 时间到！任务失败 -20元');
+                }
+                
+                // 最后30秒变红色闪烁
+                if (remaining <= 30000) {
+                    displayDiv.style.animation = 'blink 1s infinite';
+                }
+            }, 100);
+        }
+        
+        // 停止倒计时
+        function stopCountdown(success) {
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+                countdownInterval = null;
+            }
+            
+            const timerDiv = document.getElementById('countdown-timer');
+            const displayDiv = document.getElementById('countdown-display');
+            
+            timerDiv.style.display = 'none';
+            displayDiv.style.animation = 'none';
+            
+            if (success) {
+                alert('🎉 任务完成！请根据挑战规则结算金额');
+            } else {
+                alert('❌ 任务失败！-20元');
             }
         }
     </script>
