@@ -221,14 +221,14 @@ const questions = [
   },
   {
     "id": 32,
-    "question": ""春眠不觉晓"的下一句是什么？",
+    "question": "\"春眠不觉晓\"的下一句是什么？",
     "options": ["处处闻啼鸟", "夜来风雨声", "花落知多少", "草长莺飞二月天"],
     "correct": 0,
     "category": "语文"
   },
   {
     "id": 33,
-    "question": ""床前明月光"是谁写的？",
+    "question": "\"床前明月光\"是谁写的？",
     "options": ["杜甫", "李白", "白居易", "王维"],
     "correct": 1,
     "category": "语文"
@@ -242,7 +242,7 @@ const questions = [
   },
   {
     "id": 35,
-    "question": ""日"字旁通常与什么有关？",
+    "question": "\"日\"字旁通常与什么有关？",
     "options": ["水", "火", "太阳时间", "植物"],
     "correct": 2,
     "category": "语文"
@@ -256,7 +256,7 @@ const questions = [
   },
   {
     "id": 37,
-    "question": ""小荷才露尖尖角"的下一句是？",
+    "question": "\"小荷才露尖尖角\"的下一句是？",
     "options": ["早有蜻蜓立上头", "荷花满池香", "莲叶何田田", "接天莲叶无穷碧"],
     "correct": 0,
     "category": "语文"
@@ -270,7 +270,7 @@ const questions = [
   },
   {
     "id": 39,
-    "question": ""三人行，必有我师焉"出自哪本书？",
+    "question": "\"三人行，必有我师焉\"出自哪本书？",
     "options": ["《论语》", "《孟子》", "《大学》", "《中庸》"],
     "correct": 0,
     "category": "语文"
@@ -284,21 +284,21 @@ const questions = [
   },
   {
     "id": 41,
-    "question": ""红豆生南国"的作者是？",
+    "question": "\"红豆生南国\"的作者是？",
     "options": ["李白", "杜甫", "王维", "白居易"],
     "correct": 2,
     "category": "语文"
   },
   {
     "id": 42,
-    "question": "下列哪个词语表示"非常多"？",
+    "question": "下列哪个词语表示\"非常多\"？",
     "options": ["寥寥无几", "数不胜数", "屈指可数", "少之又少"],
     "correct": 1,
     "category": "语文"
   },
   {
     "id": 43,
-    "question": ""山重水复疑无路"的下一句是？",
+    "question": "\"山重水复疑无路\"的下一句是？",
     "options": ["柳暗花明又一村", "峰回路转见光明", "绝处逢生有希望", "否极泰来福自来"],
     "correct": 0,
     "category": "语文"
@@ -312,7 +312,7 @@ const questions = [
   },
   {
     "id": 45,
-    "question": ""举头望明月"的下一句是？",
+    "question": "\"举头望明月\"的下一句是？",
     "options": ["低头思故乡", "千里共婵娟", "但愿人长久", "月是故乡明"],
     "correct": 0,
     "category": "语文"
@@ -326,35 +326,35 @@ const questions = [
   },
   {
     "id": 47,
-    "question": ""谁知盘中餐"的下一句是？",
+    "question": "\"谁知盘中餐\"的下一句是？",
     "options": ["粒粒皆辛苦", "滴滴汗水换", "来之不容易", "农夫很辛苦"],
     "correct": 0,
     "category": "语文"
   },
   {
     "id": 48,
-    "question": "下列哪个词语的意思是"很安静"？",
+    "question": "下列哪个词语的意思是\"很安静\"？",
     "options": ["热闹非凡", "鸦雀无声", "人声鼎沸", "热火朝天"],
     "correct": 1,
     "category": "语文"
   },
   {
     "id": 49,
-    "question": ""桃花潭水深千尺"的下一句是？",
+    "question": "\"桃花潭水深千尺\"的下一句是？",
     "options": ["不及汪伦送我情", "不如此处风景美", "也比不上友谊深", "总比不上母爱深"],
     "correct": 0,
     "category": "语文"
   },
   {
     "id": 50,
-    "question": "下列哪个字的部首是"口"？",
+    "question": "下列哪个字的部首是\"口\"？",
     "options": ["问", "间", "闯", "闲"],
     "correct": 0,
     "category": "语文"
   },
   {
     "id": 51,
-    "question": ""白日依山尽"的下一句是？",
+    "question": "\"白日依山尽\"的下一句是？",
     "options": ["黄河入海流", "长江向东流", "春水向东流", "大河向海流"],
     "correct": 0,
     "category": "语文"
@@ -368,7 +368,7 @@ const questions = [
   },
   {
     "id": 53,
-    "question": ""草长莺飞二月天"描写的是哪个季节？",
+    "question": "\"草长莺飞二月天\"描写的是哪个季节？",
     "options": ["春天", "夏天", "秋天", "冬天"],
     "correct": 0,
     "category": "语文"
@@ -382,21 +382,21 @@ const questions = [
   },
   {
     "id": 55,
-    "question": ""欲穷千里目"的下一句是？",
+    "question": "\"欲穷千里目\"的下一句是？",
     "options": ["更上一层楼", "还需努力攀", "须登最高峰", "要爬更高山"],
     "correct": 0,
     "category": "语文"
   },
   {
     "id": 56,
-    "question": "下列哪个词语表示"非常高兴"？",
+    "question": "下列哪个词语表示\"非常高兴\"？",
     "options": ["愁眉苦脸", "兴高采烈", "垂头丧气", "闷闷不乐"],
     "correct": 1,
     "category": "语文"
   },
   {
     "id": 57,
-    "question": ""静夜思"是哪位诗人的作品？",
+    "question": "\"静夜思\"是哪位诗人的作品？",
     "options": ["杜甫", "李白", "王维", "白居易"],
     "correct": 1,
     "category": "语文"
@@ -410,7 +410,7 @@ const questions = [
   },
   {
     "id": 59,
-    "question": ""千里之行"的下一句是？",
+    "question": "\"千里之行\"的下一句是？",
     "options": ["始于足下", "靠双脚走", "要有准备", "需要坚持"],
     "correct": 0,
     "category": "语文"
@@ -433,307 +433,278 @@ const questions = [
   },
   {
     "id": 62,
-    "question": ""Hello"的中文意思是？",
+    "question": "\"Hello\"的中文意思是？",
     "options": ["再见", "你好", "谢谢", "对不起"],
     "correct": 1,
     "category": "英语"
   },
   {
     "id": 63,
-    "question": "数字"3"用英语怎么说？",
+    "question": "数字\"3\"用英语怎么说？",
     "options": ["Two", "Three", "Four", "Five"],
     "correct": 1,
     "category": "英语"
   },
   {
     "id": 64,
-    "question": ""红色"用英语怎么说？",
+    "question": "\"红色\"用英语怎么说？",
     "options": ["Blue", "Green", "Red", "Yellow"],
     "correct": 2,
     "category": "英语"
   },
   {
     "id": 65,
-    "question": ""Cat"的中文意思是？",
+    "question": "\"Cat\"的中文意思是？",
     "options": ["狗", "猫", "鸟", "鱼"],
     "correct": 1,
     "category": "英语"
   },
   {
     "id": 66,
-    "question": ""Thank you"的中文意思是？",
+    "question": "\"Thank you\"的中文意思是？",
     "options": ["不客气", "对不起", "谢谢", "再见"],
     "correct": 2,
     "category": "英语"
   },
   {
     "id": 67,
-    "question": "数字"10"用英语怎么说？",
+    "question": "数字\"10\"用英语怎么说？",
     "options": ["Nine", "Ten", "Eleven", "Twelve"],
     "correct": 1,
     "category": "英语"
   },
   {
     "id": 68,
-    "question": ""Book"的中文意思是？",
+    "question": "\"Book\"的中文意思是？",
     "options": ["笔", "书", "桌子", "椅子"],
     "correct": 1,
     "category": "英语"
   },
   {
     "id": 69,
-    "question": ""Good morning"的中文意思是？",
+    "question": "\"Good morning\"的中文意思是？",
     "options": ["晚上好", "下午好", "早上好", "晚安"],
     "correct": 2,
     "category": "英语"
   },
   {
     "id": 70,
-    "question": ""水"用英语怎么说？",
+    "question": "\"水\"用英语怎么说？",
     "options": ["Milk", "Juice", "Water", "Tea"],
     "correct": 2,
     "category": "英语"
   },
   {
     "id": 71,
-    "question": ""Dog"的中文意思是？",
+    "question": "\"Dog\"的中文意思是？",
     "options": ["猫", "狗", "兔子", "鸟"],
     "correct": 1,
     "category": "英语"
   },
   {
     "id": 72,
-    "question": ""蓝色"用英语怎么说？",
+    "question": "\"蓝色\"用英语怎么说？",
     "options": ["Red", "Blue", "Green", "Yellow"],
     "correct": 1,
     "category": "英语"
   },
   {
     "id": 73,
-    "question": ""Yes"的中文意思是？",
+    "question": "\"Yes\"的中文意思是？",
     "options": ["不", "是的", "也许", "当然"],
     "correct": 1,
     "category": "英语"
   },
   {
     "id": 74,
-    "question": "数字"7"用英语怎么说？",
+    "question": "数字\"7\"用英语怎么说？",
     "options": ["Six", "Seven", "Eight", "Nine"],
     "correct": 1,
     "category": "英语"
   },
   {
     "id": 75,
-    "question": ""School"的中文意思是？",
+    "question": "\"School\"的中文意思是？",
     "options": ["家", "学校", "商店", "医院"],
     "correct": 1,
     "category": "英语"
   },
   {
     "id": 76,
-    "question": ""Goodbye"的中文意思是？",
+    "question": "\"Goodbye\"的中文意思是？",
     "options": ["你好", "再见", "谢谢", "对不起"],
     "correct": 1,
     "category": "英语"
   },
   {
     "id": 77,
-    "question": ""绿色"用英语怎么说？",
+    "question": "\"绿色\"用英语怎么说？",
     "options": ["Red", "Blue", "Green", "Purple"],
     "correct": 2,
     "category": "英语"
   },
   {
     "id": 78,
-    "question": ""Happy"的中文意思是？",
+    "question": "\"Happy\"的中文意思是？",
     "options": ["难过", "生气", "高兴", "害怕"],
     "correct": 2,
     "category": "英语"
   },
   {
     "id": 79,
-    "question": "数字"5"用英语怎么说？",
+    "question": "数字\"5\"用英语怎么说？",
     "options": ["Four", "Five", "Six", "Seven"],
     "correct": 1,
     "category": "英语"
   },
   {
     "id": 80,
-    "question": ""Teacher"的中文意思是？",
+    "question": "\"Teacher\"的中文意思是？",
     "options": ["学生", "老师", "医生", "警察"],
     "correct": 1,
     "category": "英语"
   },
   {
     "id": 81,
-    "question": ""No"的中文意思是？",
+    "question": "\"No\"的中文意思是？",
     "options": ["是的", "不", "也许", "当然"],
     "correct": 1,
     "category": "英语"
   },
   {
     "id": 82,
-    "question": ""黄色"用英语怎么说？",
+    "question": "\"黄色\"用英语怎么说？",
     "options": ["Red", "Blue", "Green", "Yellow"],
     "correct": 3,
     "category": "英语"
   },
   {
     "id": 83,
-    "question": ""Bird"的中文意思是？",
+    "question": "\"Bird\"的中文意思是？",
     "options": ["鱼", "鸟", "兔子", "老鼠"],
     "correct": 1,
     "category": "英语"
   },
   {
     "id": 84,
-    "question": "数字"1"用英语怎么说？",
+    "question": "数字\"1\"用英语怎么说？",
     "options": ["One", "Two", "Three", "Four"],
     "correct": 0,
     "category": "英语"
   },
   {
     "id": 85,
-    "question": ""Family"的中文意思是？",
+    "question": "\"Family\"的中文意思是？",
     "options": ["朋友", "家庭", "同学", "邻居"],
     "correct": 1,
     "category": "英语"
   },
   {
     "id": 86,
-    "question": ""Good night"的中文意思是？",
+    "question": "\"Good night\"的中文意思是？",
     "options": ["早上好", "下午好", "晚上好", "晚安"],
     "correct": 3,
     "category": "英语"
   },
   {
     "id": 87,
-    "question": ""牛奶"用英语怎么说？",
+    "question": "\"牛奶\"用英语怎么说？",
     "options": ["Water", "Juice", "Milk", "Coffee"],
     "correct": 2,
     "category": "英语"
   },
   {
     "id": 88,
-    "question": ""Big"的中文意思是？",
+    "question": "\"Big\"的中文意思是？",
     "options": ["小", "大", "高", "矮"],
     "correct": 1,
     "category": "英语"
   },
   {
     "id": 89,
-    "question": "数字"8"用英语怎么说？",
+    "question": "数字\"8\"用英语怎么说？",
     "options": ["Seven", "Eight", "Nine", "Ten"],
     "correct": 1,
     "category": "英语"
   },
   {
     "id": 90,
-    "question": ""Friend"的中文意思是？",
+    "question": "\"Friend\"的中文意思是？",
     "options": ["敌人", "朋友", "陌生人", "老师"],
     "correct": 1,
     "category": "英语"
   },
   {
     "id": 91,
-    "question": ""黑色"用英语怎么说？",
+    "question": "\"黑色\"用英语怎么说？",
     "options": ["White", "Black", "Gray", "Brown"],
     "correct": 1,
     "category": "英语"
   },
   {
     "id": 92,
-    "question": ""Small"的中文意思是？",
+    "question": "\"Small\"的中文意思是？",
     "options": ["大", "小", "长", "短"],
     "correct": 1,
     "category": "英语"
   },
   {
     "id": 93,
-    "question": "数字"6"用英语怎么说？",
+    "question": "数字\"6\"用英语怎么说？",
     "options": ["Five", "Six", "Seven", "Eight"],
     "correct": 1,
     "category": "英语"
   },
   {
     "id": 94,
-    "question": ""House"的中文意思是？",
+    "question": "\"House\"的中文意思是？",
     "options": ["车", "房子", "船", "飞机"],
     "correct": 1,
     "category": "英语"
   },
   {
     "id": 95,
-    "question": ""白色"用英语怎么说？",
+    "question": "\"白色\"用英语怎么说？",
     "options": ["Black", "White", "Gray", "Brown"],
     "correct": 1,
     "category": "英语"
   },
   {
     "id": 96,
-    "question": ""Love"的中文意思是？",
+    "question": "\"Love\"的中文意思是？",
     "options": ["恨", "爱", "怕", "喜欢"],
     "correct": 1,
     "category": "英语"
   },
   {
     "id": 97,
-    "question": "数字"9"用英语怎么说？",
+    "question": "数字\"9\"用英语怎么说？",
     "options": ["Eight", "Nine", "Ten", "Eleven"],
     "correct": 1,
     "category": "英语"
   },
   {
     "id": 98,
-    "question": ""Fish"的中文意思是？",
+    "question": "\"Fish\"的中文意思是？",
     "options": ["鸟", "狗", "鱼", "猫"],
     "correct": 2,
     "category": "英语"
   },
   {
     "id": 99,
-    "question": ""Please"的中文意思是？",
+    "question": "\"Please\"的中文意思是？",
     "options": ["谢谢", "请", "对不起", "不客气"],
     "correct": 1,
     "category": "英语"
   },
   {
     "id": 100,
-    "question": "数字"4"用英语怎么说？",
+    "question": "数字\"4\"用英语怎么说？",
     "options": ["Three", "Four", "Five", "Six"],
     "correct": 1,
     "category": "英语"
-  },    "question": "中国的第一大河是？",
-    "options": [
-      "长江",
-      "黄河",
-      "珠江",
-      "松花江"
-    ],
-    "correct": 0,
-    "category": "地理"
   },
   {
-    "id": 255,
-    "question": "中国人口最多的省份是？",
-    "options": [
-      "江苏",
-      "广东",
-      "山东",
-      "河南"
-    ],
-    "correct": 1,
-    "category": "地理"
-  },
-  {
-    "id": 256,
-    "question": "“鱼米之乡”主要指？",
-    "options": [
-      "长江中下游平原",
-      "黄土高原",
-      "云贵高原",
-      "东北平原"
-    ],
     "id": 101,
     "question": "若 x + 3 = 8，则 x 等于？",
     "options": [
