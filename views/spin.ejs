@@ -172,6 +172,17 @@
         <p>玩家：<%= username %></p>
         <p style="color: #666;">转动转盘，接受生存直播挑战！</p>
         
+        <div id="container">
+            <div id="pointer"></div>
+            <canvas id="wheel" width="300" height="300"></canvas>
+        </div>
+        
+        <div id="button-area">
+            <button id="spinButton" onclick="spin()">🎰 开始转动</button>
+        </div>
+        
+        <div id="result" style="margin-top: 20px; font-size: 1.2rem; min-height: 40px;"></div>
+        
         <div class="challenge-rules">
             <h3>💰 挑战金额规则</h3>
             <div class="rules-container">
@@ -188,17 +199,6 @@
                 </div>
             </div>
         </div>
-        
-        <div id="container">
-            <div id="pointer"></div>
-            <canvas id="wheel" width="300" height="300"></canvas>
-        </div>
-        
-        <div id="button-area">
-            <button id="spinButton" onclick="spin()">🎰 开始转动</button>
-        </div>
-        
-        <div id="result" style="margin-top: 20px; font-size: 1.2rem; min-height: 40px;"></div>
     </div>
 
     <script>
@@ -207,13 +207,16 @@
         // 挑战任务和颜色 - 生存直播版
         const challenges = [
             '2元买吃的', 'Quiz', 'Scratch', 'Slot', '集体10个深蹲',
-            '和路人美女要微信', '和路人美女合照', '给路人用吉他唱歌并打分',
-            '集体热舞1分钟', '集体10个俯卧撑', '石头剪刀布公主抱下蹲5个',
-            '要路人帅哥微信', '找路人要吃的'
+            '和路人美女要微信', '和路人美女合照', '给路人吉他唱歌打分',
+            '集体热舞1分钟', '集体10个俯卧撑', '公主抱下蹲5个',
+            '要路人帅哥微信', '找路人要吃的', '和路人音准比拼',
+            '和路人歌手battle', '找路人妹妹合唱', '回答队友真心话',
+            '连续夸赞路人美女30秒', '人群中大声清唱10秒'
         ];
         const colors = [
             "#f44336", "#4caf50", "#2196f3", "#ff9800", "#9c27b0", "#607d8b",
-            "#e91e63", "#795548", "#009688", "#ff5722", "#673ab7", "#3f51b5", "#ffc107"
+            "#e91e63", "#795548", "#009688", "#ff5722", "#673ab7", "#3f51b5", 
+            "#ffc107", "#00bcd4", "#ff6b6b", "#4ecdc4", "#45b7d1", "#f7b731", "#5f27cd"
         ];
         const canvas = document.getElementById("wheel");
         const ctx = canvas.getContext("2d");
@@ -265,10 +268,10 @@
                 ctx.rotate(start + arc / 2);
                 ctx.fillStyle = "#fff";
                 // 根据屏幕大小调整字体，确保高DPI屏幕下清晰
-                const fontSize = isMobile ? 10 : 12;
+                const fontSize = isMobile ? 8 : 10;
                 ctx.font = `${fontSize}px Arial`;
                 ctx.textAlign = "right";
-                ctx.fillText(challenges[i], radius - 10, 5);
+                ctx.fillText(challenges[i], radius - 8, 3);
                 ctx.restore();
             }
         }
