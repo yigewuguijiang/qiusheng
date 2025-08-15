@@ -2,9 +2,18 @@
 const crypto = require('crypto');
 
 class GameLogic {
-    // 生成随机数
+    // 生成随机数（使用crypto真随机）
     static randomInt(min, max) {
-        return Math.floor(Math.random() * (max - min + 1)) + min;
+        const range = max - min + 1;
+        const bytesNeeded = Math.ceil(Math.log2(range) / 8);
+        const maxValue = Math.pow(2, bytesNeeded * 8);
+        
+        let randomValue;
+        do {
+            randomValue = crypto.randomBytes(bytesNeeded).readUIntBE(0, bytesNeeded);
+        } while (randomValue >= maxValue - (maxValue % range));
+        
+        return min + (randomValue % range);
     }
 
     // 生成随机字符串
@@ -208,10 +217,13 @@ class GameLogic {
         // 集体任务不需要加名字
         groupTasks: ['集体10个深蹲', '集体热舞1分钟', '集体10个俯卧撑', '公主抱下蹲5个', '转盘次数+2'],
 
-        // 根据权重随机选择挑战
+        // 根据权重随机选择挑战（使用crypto真随机）
         getWeightedRandomChallenge() {
             const totalWeight = this.weights.reduce((sum, weight) => sum + weight, 0);
-            let random = Math.random() * totalWeight;
+            // 使用crypto生成0到1之间的随机数
+            const randomBytes = crypto.randomBytes(4);
+            const randomValue = randomBytes.readUInt32BE(0) / 0xFFFFFFFF;
+            let random = randomValue * totalWeight;
             
             for (let i = 0; i < this.weights.length; i++) {
                 random -= this.weights[i];
