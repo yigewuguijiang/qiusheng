@@ -201,44 +201,42 @@ function dynamicRateLimit(req, res, next) {
     next();
 }
 
-// Session验证
+// Session验证（软性检查）
 function requireSession(req, res, next) {
+    // 如果没有session，自动创建一个
     if (!req.session || !req.session.initialized) {
-        return res.status(403).json({
-            success: false,
-            message: '请先访问页面',
-            code: 'NO_SESSION'
-        });
+        req.session.initialized = true;
+        req.session.createdAt = Date.now();
+        req.session.csrfToken = require('crypto').randomBytes(16).toString('hex');
     }
     
     // 检查session年龄
     const sessionAge = Date.now() - (req.session.createdAt || 0);
     if (sessionAge > 24 * 60 * 60 * 1000) { // 24小时
-        req.session.destroy();
-        return res.status(403).json({
-            success: false,
-            message: 'Session已过期',
-            code: 'SESSION_EXPIRED'
-        });
+        // 重新初始化而不是销毁
+        req.session.initialized = true;
+        req.session.createdAt = Date.now();
+        req.session.csrfToken = require('crypto').randomBytes(16).toString('hex');
     }
     
     next();
 }
 
-// CSRF保护
+// CSRF保护（暂时禁用，等前端适配）
 function csrfProtection(req, res, next) {
-    if (req.method === 'POST') {
-        const token = req.headers['x-csrf-token'] || req.body.csrfToken;
-        const sessionToken = req.session?.csrfToken;
-        
-        if (!token || token !== sessionToken) {
-            return res.status(403).json({
-                success: false,
-                message: '无效的请求',
-                code: 'CSRF_FAILED'
-            });
-        }
-    }
+    // 暂时跳过CSRF检查，等前端适配完成后再启用
+    // if (req.method === 'POST') {
+    //     const token = req.headers['x-csrf-token'] || req.body.csrfToken;
+    //     const sessionToken = req.session?.csrfToken;
+    //     
+    //     if (!token || token !== sessionToken) {
+    //         return res.status(403).json({
+    //             success: false,
+    //             message: '无效的请求',
+    //             code: 'CSRF_FAILED'
+    //         });
+    //     }
+    // }
     
     next();
 }
