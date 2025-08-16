@@ -62,10 +62,10 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(mongoSanitize()); // 防止NoSQL注入
 
-// 全局安全中间件
-app.use(security.checkBlacklist);
-app.use(security.deviceFingerprint);
-app.use(security.behaviorAnalysis);
+// 简化安全中间件 - 只保留基础速率限制
+// app.use(security.checkBlacklist);
+// app.use(security.deviceFingerprint);
+// app.use(security.behaviorAnalysis);
 
 // 生成随机用户名
 function generateUsername() {
@@ -152,15 +152,13 @@ app.get('/spin', security.basicRateLimit, (req, res) => {
 });
 
 // Quiz API 路由
-app.get('/api/user-info', security.strictRateLimit, (req, res) => {
+app.get('/api/user-info', security.basicRateLimit, (req, res) => {
     const username = generateUsername();
     res.json({ success: true, username });
 });
 
 app.post('/api/quiz/next', 
-    security.strictRateLimit,
-    security.requireSession,
-    security.dynamicRateLimit,
+    security.basicRateLimit,
     (req, res) => {
     try {
         const { username, seen = [], questionIndex = 0 } = req.body;
@@ -199,9 +197,7 @@ app.post('/api/quiz/next',
 });
 
 app.post('/api/quiz/submit', 
-    security.strictRateLimit,
-    security.requireSession,
-    security.dynamicRateLimit,
+    security.basicRateLimit,
     (req, res) => {
     try {
         const { username, answers = [] } = req.body;
@@ -240,9 +236,7 @@ app.post('/api/quiz/submit',
 
 // Slot API 路由
 app.post('/api/slot/spin', 
-    security.strictRateLimit,
-    security.requireSession,
-    security.dynamicRateLimit,
+    security.basicRateLimit,
     (req, res) => {
     try {
         const result = GameLogic.slot.spin();
@@ -259,9 +253,7 @@ app.post('/api/slot/spin',
 
 // Scratch API 路由
 app.post('/api/scratch', 
-    security.strictRateLimit,
-    security.requireSession,
-    security.dynamicRateLimit,
+    security.basicRateLimit,
     (req, res) => {
     try {
         const card = GameLogic.scratch.generateCard();
@@ -278,9 +270,7 @@ app.post('/api/scratch',
 
 // Spin API 路由
 app.post('/api/spin', 
-    security.strictRateLimit,
-    security.requireSession,
-    security.dynamicRateLimit,
+    security.basicRateLimit,
     (req, res) => {
     try {
         const result = GameLogic.spin.spin();

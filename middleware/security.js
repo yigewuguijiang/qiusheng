@@ -6,21 +6,31 @@ const userBehavior = new Map();
 const ipBlacklist = new Set();
 const suspiciousPatterns = new Map();
 
+// 获取真实IP地址
+function getRealIP(req) {
+    return req.headers['cf-connecting-ip'] || 
+           req.headers['x-forwarded-for']?.split(',')[0]?.trim() ||
+           req.headers['x-real-ip'] ||
+           req.connection.remoteAddress ||
+           req.ip;
+}
+
 // 生成设备指纹
 function generateFingerprint(req) {
+    const realIP = getRealIP(req);
     const components = [
         req.headers['user-agent'] || '',
         req.headers['accept-language'] || '',
         req.headers['accept-encoding'] || '',
         req.headers['accept'] || '',
-        req.connection.remoteAddress || req.ip
+        realIP
     ];
     return crypto.createHash('md5').update(components.join('|')).digest('hex');
 }
 
 // IP黑名单检查
 function checkBlacklist(req, res, next) {
-    const ip = req.ip || req.connection.remoteAddress;
+    const ip = getRealIP(req);
     
     if (ipBlacklist.has(ip)) {
         return res.status(403).json({
@@ -37,14 +47,15 @@ function checkBlacklist(req, res, next) {
 function deviceFingerprint(req, res, next) {
     const fingerprint = generateFingerprint(req);
     req.fingerprint = fingerprint;
+    const realIP = getRealIP(req);
     
     // 检查指纹变化频率（放宽标准）
-    const fpHistory = suspiciousPatterns.get(req.ip) || { fingerprints: new Set(), lastChange: 0 };
+    const fpHistory = suspiciousPatterns.get(realIP) || { fingerprints: new Set(), lastChange: 0 };
     fpHistory.fingerprints.add(fingerprint);
     
     // 大幅放宽指纹检查 - 允许更多变化
     if (fpHistory.fingerprints.size > 10 && Date.now() - fpHistory.lastChange < 600000) { // 10分钟内超过10个指纹
-        ipBlacklist.add(req.ip);
+        ipBlacklist.add(realIP);
         return res.status(403).json({
             success: false,
             message: '异常行为检测',
@@ -53,14 +64,14 @@ function deviceFingerprint(req, res, next) {
     }
     
     fpHistory.lastChange = Date.now();
-    suspiciousPatterns.set(req.ip, fpHistory);
+    suspiciousPatterns.set(realIP, fpHistory);
     
     next();
 }
 
 // 行为分析中间件
 function behaviorAnalysis(req, res, next) {
-    const ip = req.ip || req.connection.remoteAddress;
+    const ip = getRealIP(req);
     const now = Date.now();
     
     // 获取或创建用户行为记录
@@ -272,8 +283,32 @@ function cleanupOldData() {
 // 每小时清理一次
 setInterval(cleanupOldData, 60 * 60 * 1000);
 
-// 启动时立即清理一次
-cleanupOldData();
+// 启动时立即清理一次，特别清理Cloudflare IP
+function initialCleanup() {
+    // 清理Cloudflare边缘节点IP（这些不应该被封）
+    const cloudflareRanges = [
+        /^172\.69\./,
+        /^172\.70\./,
+        /^108\.162\./,
+        /^104\.23\./,
+        /^104\.24\./,
+        /^104\.25\./,
+        /^104\.26\./,
+        /^104\.27\./,
+        /^104\.28\./
+    ];
+    
+    for (const ip of ipBlacklist) {
+        if (cloudflareRanges.some(range => range.test(ip))) {
+            ipBlacklist.delete(ip);
+            console.log(`已解封Cloudflare IP: ${ip}`);
+        }
+    }
+    
+    cleanupOldData();
+}
+
+initialCleanup();
 
 // 导出中间件
 module.exports = {
