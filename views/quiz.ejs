@@ -112,6 +112,7 @@
 
     <script>
         const username = "<%= username %>";
+        const csrfToken = "<%= csrfToken %>";
         let currentIndex = 0;
         let totalQuestions = 15;
         let answers = [];
@@ -166,7 +167,10 @@
             try {
                 const res = await fetch('/api/quiz/next', {
                     method: "POST",
-                    headers: { "Content-Type": "application/json" },
+                    headers: { 
+                        "Content-Type": "application/json",
+                        "X-CSRF-Token": csrfToken
+                    },
                     body: JSON.stringify({ username, seen: seenIds, questionIndex: currentIndex })
                 });
                 
@@ -247,7 +251,10 @@
             try {
                 const res = await fetch('/api/quiz/submit', {
                     method: "POST",
-                    headers: { "Content-Type": "application/json" },
+                    headers: { 
+                        "Content-Type": "application/json",
+                        "X-CSRF-Token": csrfToken
+                    },
                     body: JSON.stringify({ username, answers, timestamp, nonce })
                 });
                 

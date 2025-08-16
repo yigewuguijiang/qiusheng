@@ -262,6 +262,7 @@
 
     <script>
         const username = "<%= username %>";
+        const csrfToken = "<%= csrfToken %>";
         const reels = ['r1', 'r2', 'r3'];
         const symbols = ['+20', '+10', '-10', '-20', '0', '+5', '-5'];
         
@@ -350,7 +351,10 @@
             try {
                 const response = await fetch('/api/slot/spin', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'X-CSRF-Token': csrfToken
+                    },
                     body: JSON.stringify({ username, timestamp, nonce })
                 });
                 

@@ -213,6 +213,7 @@
 
     <script>
         const username = "<%= username %>";
+        const csrfToken = "<%= csrfToken %>";
         
         // 路人相关任务列表
         const passerbyTasks = [
@@ -328,7 +329,10 @@
             try {
                 const response = await fetch('/api/spin', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'X-CSRF-Token': csrfToken
+                    },
                     body: JSON.stringify({ username, timestamp, nonce })
                 });
                 

@@ -184,6 +184,7 @@ app.get('/api/user-info', security.basicRateLimit, (req, res) => {
 
 app.post('/api/quiz/next', 
     security.basicRateLimit,
+    security.csrfProtection,
     (req, res) => {
     try {
         const { username, seen = [], questionIndex = 0 } = req.body;
@@ -223,6 +224,7 @@ app.post('/api/quiz/next',
 
 app.post('/api/quiz/submit', 
     security.basicRateLimit,
+    security.csrfProtection,
     (req, res) => {
     try {
         const { username, answers = [] } = req.body;
@@ -262,6 +264,7 @@ app.post('/api/quiz/submit',
 // Slot API 路由
 app.post('/api/slot/spin', 
     security.basicRateLimit,
+    security.csrfProtection,
     (req, res) => {
     try {
         const result = GameLogic.slot.spin();
@@ -279,6 +282,7 @@ app.post('/api/slot/spin',
 // Scratch API 路由
 app.post('/api/scratch', 
     security.basicRateLimit,
+    security.csrfProtection,
     (req, res) => {
     try {
         const card = GameLogic.scratch.generateCard();
@@ -296,6 +300,7 @@ app.post('/api/scratch',
 // Spin API 路由
 app.post('/api/spin', 
     security.basicRateLimit,
+    security.csrfProtection,
     (req, res) => {
     try {
         const result = GameLogic.spin.spin();

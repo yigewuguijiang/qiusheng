@@ -229,6 +229,7 @@
 
     <script>
         const username = "<%= username %>";
+        const csrfToken = "<%= csrfToken %>";
         
         // Polyfill for crypto.randomUUID
         if (!crypto.randomUUID) {
@@ -280,7 +281,10 @@
             try {
                 const res = await fetch('/api/scratch', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'X-CSRF-Token': csrfToken
+                    },
                     body: JSON.stringify({ username, timestamp, nonce })
                 });
                 

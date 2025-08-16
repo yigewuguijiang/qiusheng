@@ -23,26 +23,15 @@ class GameLogic {
 
     // Quiz 游戏逻辑
     static quiz = {
-        // 前6题必选类别
-        requiredCategories: ['常识', '英语', '数学', '语文', '音乐', '体育'],
+        // 前6题必选类别 (已废弃，现在完全随机)
+        // requiredCategories: ['常识', '英语', '数学', '语文', '音乐', '体育'],
         
         // 获取随机题目
         getRandomQuestion(questions, seenIds = [], questionIndex = 0) {
             const availableQuestions = questions.filter(q => !seenIds.includes(q.id));
             if (availableQuestions.length === 0) return null;
             
-            // 前6题确保各类别各一道
-            if (questionIndex < 6) {
-                const requiredCategory = this.requiredCategories[questionIndex];
-                const categoryQuestions = availableQuestions.filter(q => q.category === requiredCategory);
-                
-                if (categoryQuestions.length > 0) {
-                    const randomIndex = GameLogic.randomInt(0, categoryQuestions.length - 1);
-                    return categoryQuestions[randomIndex];
-                }
-            }
-            
-            // 第7题及以后完全随机
+            // 完全随机选择，不再限制前6题的类别
             const randomIndex = GameLogic.randomInt(0, availableQuestions.length - 1);
             return availableQuestions[randomIndex];
         },

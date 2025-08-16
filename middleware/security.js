@@ -233,21 +233,20 @@ function requireSession(req, res, next) {
     next();
 }
 
-// CSRF保护（暂时禁用，等前端适配）
+// CSRF保护
 function csrfProtection(req, res, next) {
-    // 暂时跳过CSRF检查，等前端适配完成后再启用
-    // if (req.method === 'POST') {
-    //     const token = req.headers['x-csrf-token'] || req.body.csrfToken;
-    //     const sessionToken = req.session?.csrfToken;
-    //     
-    //     if (!token || token !== sessionToken) {
-    //         return res.status(403).json({
-    //             success: false,
-    //             message: '无效的请求',
-    //             code: 'CSRF_FAILED'
-    //         });
-    //     }
-    // }
+    if (req.method === 'POST') {
+        const token = req.headers['x-csrf-token'] || req.body.csrfToken;
+        const sessionToken = req.session?.csrfToken;
+        
+        if (!token || token !== sessionToken) {
+            return res.status(403).json({
+                success: false,
+                message: '无效的请求',
+                code: 'CSRF_FAILED'
+            });
+        }
+    }
     
     next();
 }
