@@ -28,7 +28,24 @@ HEADERS = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
 }
 
-def get_random_question(seen_ids=[]):
+def get_csrf_token(session):
+    """获取CSRF token"""
+    # 访问quiz页面获取CSRF token
+    response = session.get(QUIZ_URL, headers=HEADERS)
+    if response.status_code != 200:
+        raise Exception(f"Failed to access quiz page: {response.status_code}")
+    
+    # 从HTML中提取CSRF token
+    html = response.text
+    if 'csrfToken = "' in html:
+        start = html.find('csrfToken = "') + len('csrfToken = "')
+        end = html.find('"', start)
+        csrf_token = html[start:end]
+        return csrf_token
+    else:
+        raise Exception("CSRF token not found in HTML")
+
+def get_random_question(session, csrf_token, seen_ids=[]):
     """获取一道随机题目"""
     payload = {
         "username": "TestUser",
@@ -39,15 +56,19 @@ def get_random_question(seen_ids=[]):
     headers = HEADERS.copy()
     headers.update({
         'Content-Type': 'application/json',
+        'X-CSRF-Token': csrf_token,
         'Referer': QUIZ_URL
     })
     
-    response = requests.post(API_URL, json=payload, headers=headers)
+    response = session.post(API_URL, json=payload, headers=headers)
     
     if response.status_code == 200:
         data = response.json()
         if data.get('success') and data.get('question'):
             return data['question']['id']
+    elif response.status_code == 403:
+        # CSRF token可能过期
+        return 'CSRF_ERROR'
     
     return None
 
@@ -60,18 +81,43 @@ def run_probability_test():
     # 统计数据
     question_counts = defaultdict(int)
     failed_requests = 0
+    csrf_errors = 0
     
-    print(f"🚀 开始测试，无需CSRF token...")
+    # 创建session
+    session = requests.Session()
+    
+    try:
+        # 获取初始CSRF token
+        csrf_token = get_csrf_token(session)
+        print(f"✅ 获取CSRF Token成功: {csrf_token[:10]}...")
+    except Exception as e:
+        print(f"❌ 获取CSRF Token失败: {e}")
+        return {}, TOTAL_TESTS
     
     for i in range(TOTAL_TESTS):
         try:
-            # 每100次显示进度
-            if i % 100 == 0 and i > 0:
-                print(f"🔄 已完成 {i}/{TOTAL_TESTS} 次测试...")
+            # 每50次刷新token
+            if i % 50 == 0 and i > 0:
+                try:
+                    csrf_token = get_csrf_token(session)
+                    print(f"🔄 已完成 {i}/{TOTAL_TESTS} 次测试，刷新token...")
+                except:
+                    pass
             
-            question_id = get_random_question()
+            question_id = get_random_question(session, csrf_token)
             
-            if question_id:
+            if question_id == 'CSRF_ERROR':
+                # CSRF错误，尝试重新获取token
+                csrf_errors += 1
+                try:
+                    csrf_token = get_csrf_token(session)
+                    # 重试请求
+                    question_id = get_random_question(session, csrf_token)
+                except:
+                    failed_requests += 1
+                    continue
+            
+            if question_id and question_id != 'CSRF_ERROR':
                 question_counts[question_id] += 1
             else:
                 failed_requests += 1
@@ -90,6 +136,7 @@ def run_probability_test():
     print(f"\n📈 测试完成!")
     print(f"成功请求: {len(question_counts)} 道不同题目")
     print(f"失败请求: {failed_requests}")
+    print(f"CSRF错误: {csrf_errors}")
     print(f"总请求数: {TOTAL_TESTS}")
     
     return question_counts, failed_requests

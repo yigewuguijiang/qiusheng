@@ -16,6 +16,23 @@ HEADERS = {
     'Content-Type': 'application/json'
 }
 
+def get_csrf_token(session):
+    """获取CSRF token"""
+    # 访问quiz页面获取CSRF token
+    response = session.get(f"{BASE_URL}/quiz", headers=HEADERS)
+    if response.status_code != 200:
+        raise Exception(f"Failed to access quiz page: {response.status_code}")
+    
+    # 从HTML中提取CSRF token
+    html = response.text
+    if 'csrfToken = "' in html:
+        start = html.find('csrfToken = "') + len('csrfToken = "')
+        end = html.find('"', start)
+        csrf_token = html[start:end]
+        return csrf_token
+    else:
+        raise Exception("CSRF token not found in HTML")
+
 def test_different_scenarios():
     """测试不同的请求场景"""
     
@@ -45,6 +62,15 @@ def test_different_scenarios():
     print("🔍 测试不同请求场景:")
     print("=" * 60)
     
+    # 创建session并获取CSRF token
+    session = requests.Session()
+    try:
+        csrf_token = get_csrf_token(session)
+        print(f"✅ 获取CSRF Token成功")
+    except Exception as e:
+        print(f"❌ 获取CSRF Token失败: {e}")
+        return
+    
     for scenario in scenarios:
         print(f"\n📋 {scenario['name']}:")
         
@@ -52,7 +78,10 @@ def test_different_scenarios():
         question_ids = set()
         for i in range(20):
             try:
-                response = requests.post(API_URL, json=scenario['payload'], headers=HEADERS)
+                headers = HEADERS.copy()
+                headers['X-CSRF-Token'] = csrf_token
+                
+                response = session.post(API_URL, json=scenario['payload'], headers=headers)
                 if response.status_code == 200:
                     data = response.json()
                     if data.get('success') and data.get('question'):
@@ -79,19 +108,38 @@ def exhaustive_search():
         list(range(101, 151)), # seen 101-150
     ]
     
+    # 创建session并获取CSRF token
+    session = requests.Session()
+    try:
+        csrf_token = get_csrf_token(session)
+        print(f"✅ 获取CSRF Token成功")
+    except Exception as e:
+        print(f"❌ 获取CSRF Token失败: {e}")
+        return set()
+    
     for seen in seen_combinations:
         print(f"\n🔄 测试seen={len(seen)}个题目的情况...")
         
         # 每种seen组合测试100次
         for i in range(100):
             try:
+                # 每25次刷新token
+                if i % 25 == 0 and i > 0:
+                    try:
+                        csrf_token = get_csrf_token(session)
+                    except:
+                        pass
+                
                 payload = {
                     "username": f"TestUser{i}",
                     "seen": seen,
                     "questionIndex": len(seen)
                 }
                 
-                response = requests.post(API_URL, json=payload, headers=HEADERS)
+                headers = HEADERS.copy()
+                headers['X-CSRF-Token'] = csrf_token
+                
+                response = session.post(API_URL, json=payload, headers=headers)
                 if response.status_code == 200:
                     data = response.json()
                     if data.get('success') and data.get('question'):
