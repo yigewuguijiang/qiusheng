@@ -1,9 +1,15 @@
 const express = require('express');
 const path = require('path');
+const session = require('express-session');
+const helmet = require('helmet');
+const mongoSanitize = require('express-mongo-sanitize');
 
 // 导入本地游戏数据和逻辑
 const questions = require('./data/questions');
 const GameLogic = require('./data/gameLogic');
+
+// 导入安全中间件
+const security = require('./middleware/security');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -12,18 +18,48 @@ const PORT = process.env.PORT || 3000;
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-// 中间件
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// 信任代理（Render等平台需要）
+app.set('trust proxy', 1);
 
-// 安全头
-app.use((req, res, next) => {
-    res.setHeader('X-Content-Type-Options', 'nosniff');
-    res.setHeader('X-Frame-Options', 'DENY');
-    res.setHeader('X-XSS-Protection', '1; mode=block');
-    next();
-});
+// Helmet 安全头
+app.use(helmet({
+    contentSecurityPolicy: {
+        directives: {
+            defaultSrc: ["'self'"],
+            styleSrc: ["'self'", "'unsafe-inline'"],
+            scriptSrc: ["'self'", "'unsafe-inline'"],
+            imgSrc: ["'self'", "data:", "https:"],
+        },
+    },
+    hsts: {
+        maxAge: 31536000,
+        includeSubDomains: true,
+        preload: true
+    }
+}));
+
+// Session配置
+app.use(session({
+    secret: process.env.SESSION_SECRET || 'your-secret-key-change-this-in-production',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        secure: process.env.NODE_ENV === 'production',
+        httpOnly: true,
+        maxAge: 24 * 60 * 60 * 1000 // 24小时
+    }
+}));
+
+// 基础中间件
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+app.use(mongoSanitize()); // 防止NoSQL注入
+
+// 全局安全中间件
+app.use(security.checkBlacklist);
+app.use(security.deviceFingerprint);
+app.use(security.behaviorAnalysis);
 
 // 生成随机用户名
 function generateUsername() {
@@ -40,36 +76,86 @@ const userSessions = new Map();
 
 // 路由
 app.get('/', (req, res) => {
+    // 初始化session
+    if (!req.session.initialized) {
+        req.session.initialized = true;
+        req.session.createdAt = Date.now();
+        req.session.csrfToken = GameLogic.generateToken(16);
+    }
     res.render('index');
 });
 
-app.get('/quiz', (req, res) => {
+app.get('/quiz', security.basicRateLimit, (req, res) => {
+    // 初始化session
+    if (!req.session.initialized) {
+        req.session.initialized = true;
+        req.session.createdAt = Date.now();
+        req.session.csrfToken = GameLogic.generateToken(16);
+    }
+    
     const username = generateUsername();
-    res.render('quiz', { username });
+    res.render('quiz', { 
+        username,
+        csrfToken: req.session.csrfToken
+    });
 });
 
-app.get('/slot', (req, res) => {
+app.get('/slot', security.basicRateLimit, (req, res) => {
+    // 初始化session
+    if (!req.session.initialized) {
+        req.session.initialized = true;
+        req.session.createdAt = Date.now();
+        req.session.csrfToken = GameLogic.generateToken(16);
+    }
+    
     const username = generateUsername();
-    res.render('slot', { username });
+    res.render('slot', { 
+        username,
+        csrfToken: req.session.csrfToken
+    });
 });
 
-app.get('/scratch', (req, res) => {
+app.get('/scratch', security.basicRateLimit, (req, res) => {
+    // 初始化session
+    if (!req.session.initialized) {
+        req.session.initialized = true;
+        req.session.createdAt = Date.now();
+        req.session.csrfToken = GameLogic.generateToken(16);
+    }
+    
     const username = generateUsername();
-    res.render('scratch', { username });
+    res.render('scratch', { 
+        username,
+        csrfToken: req.session.csrfToken
+    });
 });
 
-app.get('/spin', (req, res) => {
+app.get('/spin', security.basicRateLimit, (req, res) => {
+    // 初始化session
+    if (!req.session.initialized) {
+        req.session.initialized = true;
+        req.session.createdAt = Date.now();
+        req.session.csrfToken = GameLogic.generateToken(16);
+    }
+    
     const username = generateUsername();
-    res.render('spin', { username });
+    res.render('spin', { 
+        username,
+        csrfToken: req.session.csrfToken
+    });
 });
 
 // Quiz API 路由
-app.get('/api/user-info', (req, res) => {
+app.get('/api/user-info', security.strictRateLimit, (req, res) => {
     const username = generateUsername();
     res.json({ success: true, username });
 });
 
-app.post('/api/quiz/next', (req, res) => {
+app.post('/api/quiz/next', 
+    security.strictRateLimit,
+    security.requireSession,
+    security.dynamicRateLimit,
+    (req, res) => {
     try {
         const { username, seen = [], questionIndex = 0 } = req.body;
         
@@ -106,7 +192,11 @@ app.post('/api/quiz/next', (req, res) => {
     }
 });
 
-app.post('/api/quiz/submit', (req, res) => {
+app.post('/api/quiz/submit', 
+    security.strictRateLimit,
+    security.requireSession,
+    security.dynamicRateLimit,
+    (req, res) => {
     try {
         const { username, answers = [] } = req.body;
         
@@ -143,7 +233,11 @@ app.post('/api/quiz/submit', (req, res) => {
 });
 
 // Slot API 路由
-app.post('/api/slot/spin', (req, res) => {
+app.post('/api/slot/spin', 
+    security.strictRateLimit,
+    security.requireSession,
+    security.dynamicRateLimit,
+    (req, res) => {
     try {
         const result = GameLogic.slot.spin();
         res.json({
@@ -158,7 +252,11 @@ app.post('/api/slot/spin', (req, res) => {
 });
 
 // Scratch API 路由
-app.post('/api/scratch', (req, res) => {
+app.post('/api/scratch', 
+    security.strictRateLimit,
+    security.requireSession,
+    security.dynamicRateLimit,
+    (req, res) => {
     try {
         const card = GameLogic.scratch.generateCard();
         res.json({
@@ -173,7 +271,11 @@ app.post('/api/scratch', (req, res) => {
 });
 
 // Spin API 路由
-app.post('/api/spin', (req, res) => {
+app.post('/api/spin', 
+    security.strictRateLimit,
+    security.requireSession,
+    security.dynamicRateLimit,
+    (req, res) => {
     try {
         const result = GameLogic.spin.spin();
         res.json({
@@ -195,6 +297,73 @@ app.get('/health', (req, res) => {
         games: ['quiz', 'slot', 'scratch', 'spin'],
         questions: questions.length
     });
+});
+
+// 安全监控面板（需要认证）
+app.get('/admin/security', (req, res) => {
+    // 简单的密码保护
+    const auth = req.headers.authorization;
+    const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
+    
+    if (!auth || !auth.startsWith('Bearer ') || auth.split(' ')[1] !== adminPassword) {
+        res.setHeader('WWW-Authenticate', 'Bearer');
+        return res.status(401).json({ message: 'Unauthorized' });
+    }
+    
+    // 收集安全统计信息
+    const blacklist = security.getBlacklist();
+    const behaviorStats = [];
+    
+    // 获取行为统计（最多显示100个）
+    let count = 0;
+    for (const [ip, behavior] of Object.entries({})) {
+        if (count >= 100) break;
+        
+        const userBehavior = security.getUserBehavior(ip);
+        if (userBehavior) {
+            behaviorStats.push({
+                ip,
+                totalRequests: userBehavior.totalRequests,
+                suspicionScore: userBehavior.suspicionScore,
+                avgInterval: Math.round(userBehavior.patterns?.avgInterval || 0),
+                minInterval: userBehavior.patterns?.minInterval || 0,
+                lastSeen: new Date(userBehavior.lastRequestTime).toISOString()
+            });
+        }
+        count++;
+    }
+    
+    res.json({
+        timestamp: new Date().toISOString(),
+        security: {
+            blacklistedIPs: blacklist.length,
+            blacklist: blacklist.slice(0, 20), // 只显示前20个
+            activeUsers: behaviorStats.length,
+            suspiciousUsers: behaviorStats.filter(u => u.suspicionScore > 30).length,
+            recentBehavior: behaviorStats
+                .sort((a, b) => b.suspicionScore - a.suspicionScore)
+                .slice(0, 20)
+        }
+    });
+});
+
+// 安全管理接口
+app.post('/admin/security/unblock', (req, res) => {
+    const auth = req.headers.authorization;
+    const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
+    
+    if (!auth || !auth.startsWith('Bearer ') || auth.split(' ')[1] !== adminPassword) {
+        return res.status(401).json({ message: 'Unauthorized' });
+    }
+    
+    const { ip } = req.body;
+    if (ip) {
+        security.removeFromBlacklist(ip);
+        security.clearUserBehavior(ip);
+        res.json({ success: true, message: `IP ${ip} has been unblocked` });
+    } else {
+        res.status(400).json({ success: false, message: 'IP address required' });
+    }
 });
 
 // 404 处理

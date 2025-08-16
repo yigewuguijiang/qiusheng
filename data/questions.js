@@ -2783,7 +2783,7 @@ const questions = [
     "question": "NBA历史上总得分最多的球员是？",
     "options": ["贾巴尔", "乔丹", "科比", "詹姆斯"],
     "correct": 3,
-    "category": "历史"
+    "category": "体育"
   },
   {
     "id": 399,
