@@ -378,13 +378,11 @@
                         // 特殊任务额外显示
                         const prizeText = data.prize;
                         
-                        // 歌手battle特殊显示
-                        if (prizeText.includes('和路人歌手battle')) {
-                            const singers = ['周杰伦', '林俊杰', '王力宏', '陶喆', '邓紫棋', '孙燕姿', '张惠妹', '梁静茹'];
-                            const randomSinger = singers[Math.floor(Math.random() * singers.length)];
+                        // 猜歌任务特殊显示
+                        if (prizeText.includes('找到一名路人猜歌') && data.singerInfo) {
                             displayContent += `
                                 <div style="color: #28a745; font-size: 1.1rem; margin-top: 10px; padding: 10px; background: #d4edda; border-radius: 8px;">
-                                    任务：轮流演唱【${randomSinger}】歌曲
+                                    请演唱一首【${data.singerInfo}】的歌曲，并且让路人说出歌名
                                 </div>
                             `;
                         }

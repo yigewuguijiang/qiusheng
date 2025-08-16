@@ -169,7 +169,7 @@ class GameLogic {
             '要路人帅哥微信',
             '找路人要吃的',
             '和路人音准比拼',
-            '和路人歌手battle',
+            '找到一名路人猜歌',
             '找路人妹妹合唱',
             '回答队友真心话',
             '连续夸赞路人美女30秒',
@@ -193,7 +193,7 @@ class GameLogic {
             1, // 要路人帅哥微信
             1, // 找路人要吃的
             1, // 和路人音准比拼
-            1, // 和路人歌手battle
+            1, // 找到一名路人猜歌
             1, // 找路人妹妹合唱
             1, // 回答队友真心话
             1, // 连续夸赞路人美女30秒
@@ -202,6 +202,9 @@ class GameLogic {
         ],
         
         names: ['麻瓜', '大彪'],
+        
+        // 歌手列表
+        singers: ['周杰伦', '林俊杰', '邓紫棋', '张学友', '陈奕迅', '王菲', '薛之谦', '毛不易', '李荣浩', '汪苏泷'],
         
         // 集体任务不需要加名字
         groupTasks: ['集体10个深蹲', '集体热舞1分钟', '集体10个俯卧撑', '公主抱下蹲5个', '转盘次数+2'],
@@ -227,9 +230,16 @@ class GameLogic {
             // 使用权重随机选择实际的挑战
             const actualChallengeIndex = this.getWeightedRandomChallenge();
             let challenge = this.challenges[actualChallengeIndex];
+            let singerInfo = null;
+            
+            // 如果是猜歌任务，选择歌手
+            if (challenge === '找到一名路人猜歌') {
+                const randomSinger = this.singers[GameLogic.randomInt(0, this.singers.length - 1)];
+                singerInfo = randomSinger;
+            }
             
             // 如果不是集体任务，随机加上一个人名
-            if (!this.groupTasks.includes(challenge)) {
+            if (!this.groupTasks.includes(this.challenges[actualChallengeIndex])) {
                 const randomName = this.names[GameLogic.randomInt(0, this.names.length - 1)];
                 challenge = `${randomName}: ${challenge}`;
             }
@@ -243,7 +253,8 @@ class GameLogic {
             return {
                 prize: challenge,
                 angle,
-                success: true
+                success: true,
+                singerInfo // 额外返回歌手信息，方便前端显示
             };
         }
     };
