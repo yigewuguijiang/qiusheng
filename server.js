@@ -80,6 +80,31 @@ function generateUsername() {
 // 存储用户会话数据 (简单内存存储)
 const userSessions = new Map();
 
+// 创建题目ID索引，提升查找性能
+const questionMap = new Map(questions.map(q => [q.id, q]));
+
+// 定时清理过期的用户会话数据
+setInterval(() => {
+    const now = Date.now();
+    const maxAge = 5 * 60 * 1000; // 5分钟过期
+    
+    for (const [username, sessions] of userSessions.entries()) {
+        if (typeof sessions === 'object' && sessions !== null) {
+            for (const [token, data] of Object.entries(sessions)) {
+                if (data && now - data.timestamp > maxAge) {
+                    delete sessions[token];
+                }
+            }
+            // 如果用户的所有session都过期了，删除用户记录
+            if (Object.keys(sessions).length === 0) {
+                userSessions.delete(username);
+            }
+        }
+    }
+    
+    console.log(`Session cleanup: ${userSessions.size} active users`);
+}, 60000); // 每分钟清理一次
+
 // 路由
 app.get('/', (req, res) => {
     // 初始化session
@@ -208,7 +233,7 @@ app.post('/api/quiz/submit',
         for (const answer of answers) {
             const sessionData = userSession[answer.token];
             if (sessionData) {
-                const question = questions.find(q => q.id === sessionData.questionId);
+                const question = questionMap.get(sessionData.questionId); // O(1)查找
                 if (question && GameLogic.quiz.validateAnswer(question, answer.answerIndex)) {
                     correctCount++;
                 }
