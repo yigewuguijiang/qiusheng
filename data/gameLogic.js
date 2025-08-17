@@ -174,7 +174,17 @@ class GameLogic {
             '回答队友真心话',
             '连续夸赞路人美女30秒',
             '人群中大声清唱10秒',
-            '转盘次数+2'
+            '转盘次数+2',
+            '和路人帅哥合照',
+            '集体反方向走一分钟',
+            '和路人石头剪刀布',
+            '让路人B站关注一个乌龟酱',
+            '找一名路人猜年龄',
+            '浏览器记录',
+            '手拉手走一分钟',
+            '垃圾清洁工',
+            '含水对视',
+            '背起走路'
         ],
         
         // 权重数组：所有选项权重相等
@@ -198,7 +208,17 @@ class GameLogic {
             1, // 回答队友真心话
             1, // 连续夸赞路人美女30秒
             1, // 人群中大声清唱10秒
-            1  // 转盘次数+2
+            1, // 转盘次数+2
+            1, // 和路人帅哥合照
+            1, // 集体反方向走一分钟
+            1, // 和路人石头剪刀布
+            1, // 让路人B站关注一个乌龟酱
+            1, // 找一名路人猜年龄
+            1, // 浏览器记录
+            1, // 手拉手走一分钟
+            1, // 垃圾清洁工
+            1, // 含水对视
+            1  // 背起走路
         ],
         
         names: ['麻瓜', '大彪'],
@@ -207,7 +227,8 @@ class GameLogic {
         singers: ['周杰伦', '林俊杰', '邓紫棋', '张学友', '陈奕迅', '王菲', '薛之谦', '毛不易', '李荣浩', '汪苏泷'],
         
         // 集体任务不需要加名字
-        groupTasks: ['集体10个深蹲', '集体热舞1分钟', '集体10个俯卧撑', '公主抱下蹲5个', '转盘次数+2'],
+        groupTasks: ['集体10个深蹲', '集体热舞1分钟', '集体10个俯卧撑', '公主抱下蹲5个', '转盘次数+2', 
+                    '集体反方向走一分钟', '手拉手走一分钟', '含水对视', '背起走路'],
 
         // 根据权重随机选择挑战（使用crypto真随机）
         getWeightedRandomChallenge() {
@@ -245,9 +266,9 @@ class GameLogic {
             }
             
             // 计算显示角度（基于实际选择的挑战）
-            const segmentAngle = 360 / this.challenges.length;  // 20个任务，每个18度
+            const segmentAngle = 360 / this.challenges.length;  // 30个任务，每个12度
             const centerAngle = actualChallengeIndex * segmentAngle + segmentAngle / 2;
-            const randomOffset = GameLogic.randomInt(-6, 6);  // ±6度偏移，确保在扇形内
+            const randomOffset = GameLogic.randomInt(-5, 5) + (Math.random() * 0.9 - 0.45);  // ±5.9度偏移，确保在扇形内
             const angle = (centerAngle + randomOffset) % 360;
             
             return {
