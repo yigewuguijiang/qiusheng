@@ -242,6 +242,22 @@
         
         let hasVerified = true;
         
+        // 音效控制
+        const sounds = {
+            scratch: new Audio('/assets/audio/scratch.mp3'),
+            win: new Audio('/assets/audio/win.mp3'),
+            lose: new Audio('/assets/audio/lose.mp3')
+        };
+        
+        // 预加载音效
+        Object.values(sounds).forEach(sound => {
+            sound.load();
+        });
+        
+        // 刮刮音效控制
+        let scratchSoundPlaying = false;
+        let scratchSoundTimeout = null;
+        
         function createCard(num, prize, isWinning = false) {
             const cell = document.createElement('div');
             cell.className = isWinning ? 'grid-item winning-number' : 'grid-item';
@@ -375,6 +391,20 @@
                     }
                     lastX = x;
                     lastY = y;
+                    
+                    // 播放刮刮音效
+                    if (!scratchSoundPlaying) {
+                        scratchSoundPlaying = true;
+                        sounds.scratch.currentTime = 0;
+                        sounds.scratch.play().catch(e => console.log('无法播放音效:', e));
+                    }
+                    
+                    // 延迟停止音效
+                    clearTimeout(scratchSoundTimeout);
+                    scratchSoundTimeout = setTimeout(() => {
+                        sounds.scratch.pause();
+                        scratchSoundPlaying = false;
+                    }, 100);
                 }
                 
                 document.getElementById('verifyResult').textContent = '';
@@ -408,9 +438,15 @@
                 }, 0);
                 result.textContent = `🎉 恭喜中奖！总金额：+${totalAmount}`;
                 result.style.color = '#00ff88';
+                // 播放中奖音效
+                sounds.win.currentTime = 0;
+                sounds.win.play().catch(e => console.log('无法播放音效:', e));
             } else {
                 result.textContent = '😢 很遗憾，这次没有中奖。再试一次！';
                 result.style.color = '#ff5555';
+                // 播放未中奖音效
+                sounds.lose.currentTime = 0;
+                sounds.lose.play().catch(e => console.log('无法播放音效:', e));
             }
             
             hasVerified = true;
