@@ -198,13 +198,13 @@
             <div class="rules-container">
                 <div class="rule-section">
                     <strong>🎯 通用规则：</strong>
-                    <span>所有挑战成功 <span class="success">+20元</span> | 失败 <span class="fail">-20元</span></span>
+                    <span>所有挑战成功 <span class="success">+4加币</span> | 失败 <span class="fail">-4加币</span></span>
                 </div>
                 <div class="rule-section special">
                     <strong>⭐ 特殊规则（要微信）：</strong>
                     <div class="special-rules">
-                        <span>麻瓜：成功 <span class="success">+30元</span> | 失败 <span class="fail">-10元</span></span>
-                        <span>大彪：成功 <span class="success">+20元</span> | 失败 <span class="fail">-10元</span></span>
+                        <span>麻瓜：成功 <span class="success">+6加币</span> | 失败 <span class="fail">-2加币</span></span>
+                        <span>大彪：成功 <span class="success">+4加币</span> | 失败 <span class="fail">-2加币</span></span>
                     </div>
                 </div>
             </div>
@@ -217,19 +217,19 @@
         
         // 路人相关任务列表
         const passerbyTasks = [
-            '和路人美女要微信',
-            '和路人美女合照',
-            '给路人吉他唱歌打分',
-            '要路人帅哥微信',
-            '找路人要吃的',
-            '和路人音准比拼',
-            '找到一名路人猜歌',
-            '找路人妹妹合唱',
-            '连续夸赞路人美女30秒',
-            '和路人帅哥合照',
-            '和路人石头剪刀布',
-            '让路人B站关注一个乌龟酱',
-            '找一名路人猜年龄',
+            // '和路人美女要微信',
+            // '和路人美女合照',
+            // '给路人吉他唱歌打分',
+            // '要路人帅哥微信',
+            // '找路人要吃的',
+            // '和路人音准比拼',
+            // '找到一名路人猜歌',
+            // '找路人妹妹合唱',
+            // '连续夸赞路人美女30秒',
+            // '和路人帅哥合照',
+            // '和路人石头剪刀布',
+            // '让路人B站关注一个乌龟酱',
+            // '找一名路人猜年龄',
             '垃圾清洁工'
         ];
         
@@ -238,15 +238,15 @@
         
         // 挑战任务和颜色 - 生存直播版
         const challenges = [
-            '2元买吃的', 'Quiz', 'Scratch', 'Slot', '集体10个深蹲',
-            '和路人美女要微信', '和路人美女合照', '给路人吉他唱歌打分',
-            '集体热舞1分钟', '集体10个俯卧撑', '公主抱下蹲5个',
-            '要路人帅哥微信', '找路人要吃的', '和路人音准比拼',
-            '找到一名路人猜歌', '找路人妹妹合唱', '回答队友真心话',
-            '连续夸赞路人美女30秒', '人群中大声清唱10秒', '转盘次数+2',
-            '和路人帅哥合照', '集体反方向走一分钟', '和路人石头剪刀布',
-            '让路人B站关注一个乌龟酱', '找一名路人猜年龄', '浏览器记录',
-            '手拉手走一分钟', '垃圾清洁工', '含水对视', '背起走路'
+            '2加币买吃的', 'Quiz', 'Scratch', 'Slot', '10个深蹲',
+            /*'和路人美女要微信', '和路人美女合照', '给路人吉他唱歌打分',*/
+            '热舞1分钟', '10个俯卧撑', /*'公主抱下蹲5个',*/
+            /*'要路人帅哥微信', '找路人要吃的', '和路人音准比拼',*/
+            /*'找到一名路人猜歌', '找路人妹妹合唱', '回答队友真心话',*/
+            /*'连续夸赞路人美女30秒',*/ /*'人群中大声清唱10秒',*/ '转盘次数+2',
+            /*'和路人帅哥合照',*/ '反方向走一分钟', /*'和路人石头剪刀布',*/
+            /*'让路人B站关注一个乌龟酱', '找一名路人猜年龄',*/ '浏览器记录',
+            /*'手拉手走一分钟',*/ '垃圾清洁工' /*, '含水对视', '背起走路'*/
         ];
         const colors = [
             "#f44336", "#4caf50", "#2196f3", "#ff9800", "#9c27b0", "#607d8b",
@@ -388,17 +388,17 @@
                         const prizeText = data.prize;
                         
                         // 猜歌任务特殊显示
-                        if (prizeText.includes('找到一名路人猜歌') && data.singerInfo) {
-                            displayContent += `
-                                <div style="color: #28a745; font-size: 1.1rem; margin-top: 10px; padding: 10px; background: #d4edda; border-radius: 8px;">
-                                    请演唱一首【${data.singerInfo}】的歌曲，并且让路人说出歌名
-                                </div>
-                            `;
-                        }
+                        // if (prizeText.includes('找到一名路人猜歌') && data.singerInfo) {
+                        //     displayContent += `
+                        //         <div style="color: #28a745; font-size: 1.1rem; margin-top: 10px; padding: 10px; background: #d4edda; border-radius: 8px;">
+                        //             请演唱一首【${data.singerInfo}】的歌曲，并且让路人说出歌名
+                        //         </div>
+                        //     `;
+                        // }
                         
                         // 只显示通用挑战任务标签（没有具体说明的任务）
-                        const basicChallengeTasks = ['找妹妹合唱', '找路人要吃的', '要帅哥微信', 
-                                                   '吉他唱歌打分', '美女合照', '美女要微信', '夸赞美女30秒'];
+                        const basicChallengeTasks = [/*'找妹妹合唱',*/ '找路人要吃的', '要帅哥微信', 
+                                                   /*'吉他唱歌打分',*/ '美女合照', '美女要微信', '夸赞美女30秒'];
                         
                         if (basicChallengeTasks.some(task => prizeText.includes(task))) {
                             displayContent += `
@@ -424,7 +424,7 @@
                         if (prizeText.includes('和路人帅哥合照')) {
                             displayContent += `
                                 <div style="color: #28a745; font-size: 1.1rem; margin-top: 10px; padding: 10px; background: #d4edda; border-radius: 8px;">
-                                    用手机合照一张算成功 成功+20失败扣20
+                                    用手机合照一张算成功 成功+4失败扣4
                                 </div>
                             `;
                         }
@@ -451,7 +451,7 @@
                         if (prizeText.includes('让路人B站关注一个乌龟酱')) {
                             displayContent += `
                                 <div style="color: #28a745; font-size: 1.1rem; margin-top: 10px; padding: 10px; background: #d4edda; border-radius: 8px;">
-                                    若路人没有B站，则让路人下载并关注 成功+20失败扣20
+                                    若路人没有B站，则让路人下载并关注 成功+4失败扣4
                                 </div>
                             `;
                         }
@@ -460,7 +460,7 @@
                         if (prizeText.includes('找一名路人猜年龄')) {
                             displayContent += `
                                 <div style="color: #28a745; font-size: 1.1rem; margin-top: 10px; padding: 10px; background: #d4edda; border-radius: 8px;">
-                                    找到一名路人 猜测自己年龄 上下三岁及以内算成功 成功+20失败扣20
+                                    找到一名路人 猜测自己年龄 上下三岁及以内算成功 成功+4失败扣4
                                 </div>
                             `;
                         }
@@ -505,7 +505,7 @@
                         if (prizeText.includes('背起走路')) {
                             displayContent += `
                                 <div style="color: #28a745; font-size: 1.1rem; margin-top: 10px; padding: 10px; background: #d4edda; border-radius: 8px;">
-                                    两名男生，一人背起一人，走1步加1元，上限20元，若小于5步则扣20元
+                                    两名男生，一人背起一人，走1步加0.2加币，上限4加币，若小于5步则扣4加币
                                 </div>
                             `;
                         }
