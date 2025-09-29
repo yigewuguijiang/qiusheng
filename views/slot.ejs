@@ -264,17 +264,15 @@
         const username = "<%= username %>";
         const csrfToken = "<%= csrfToken %>";
         const reels = ['r1', 'r2', 'r3'];
-        const symbols = ['+20', '+10', '-10', '-20', '0', '+5', '-5'];
+        const symbols = ['+2', '+1', '0', '-1', '-2'];
         
         // 金额映射
         const symbolMap = {
-            '+20': '+20',
-            '+10': '+10', 
-            '-10': '-10',
-            '-20': '-20',
-            '无奖': '0',
-            '+5': '+5',
-            '-5': '-5'
+            '+2': '+2',
+            '+1': '+1',
+            '0': '0',
+            '-1': '-1',
+            '-2': '-2'
         };
         
         function generateNonce(length = 16) {
@@ -392,11 +390,11 @@
         <h3>💰 金额说明</h3>
         <p>转动转轮，获得随机金额奖励！</p>
         <div class="prize-grid">
-            <div class="prize-item">+4加币</div>
             <div class="prize-item">+2加币</div>
-            <div class="prize-item">-2加币</div>
-            <div class="prize-item">-4加币</div>
+            <div class="prize-item">+1加币</div>
             <div class="prize-item">0加币</div>
+            <div class="prize-item">-1加币</div>
+            <div class="prize-item">-2加币</div>
         </div>
     </div>
     

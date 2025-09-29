@@ -63,21 +63,21 @@ class GameLogic {
             const rand = Math.random();
             let reward = '0';
             
-            // 10%概率加20 20%概率加10 20概率减10 10概率减20 40概率3个图案不一样就啥也没有
-            if (rand < 0.1) {
-                reward = '+4';
-            } else if (rand < 0.3) {  // 0.1-0.3 = 20%
-                reward = '+2';
-            } else if (rand < 0.5) {  // 0.3-0.5 = 20%
-                reward = '-2';
-            } else if (rand < 0.6) {  // 0.5-0.6 = 10%
-                reward = '-4';
+            // 新概率分配：各20%概率
+            if (rand < 0.2) {
+                reward = '+2';  // 20%概率
+            } else if (rand < 0.4) {  // 0.2-0.4 = 20%
+                reward = '+1';  // 20%概率
+            } else if (rand < 0.6) {  // 0.4-0.6 = 20%
+                reward = '0';   // 20%概率
+            } else if (rand < 0.8) {  // 0.6-0.8 = 20%
+                reward = '-1';  // 20%概率
             } else {
-                reward = '0';  // 60%-100% = 40%
+                reward = '-2';  // 0.8-1.0 = 20%
             }
             
             // 生成显示用的转轮
-            const amounts = ['+4', '+2', '-2', '-4', '0'];
+            const amounts = ['+2', '+1', '0', '-1', '-2'];
             let reels;
             
             if (reward === '0') {
@@ -125,13 +125,11 @@ class GameLogic {
                 const rand = Math.random();
                 let amount;
                 if (rand < 0.1) {
-                    amount = '+6';  // 10%概率
+                    amount = '+2';  // 10%概率
                 } else if (rand < 0.3) {
-                    amount = '+4';  // 20%概率
-                } else if (rand < 0.6) {
-                    amount = '+2';  // 30%概率
+                    amount = '+1';  // 20%概率
                 } else {
-                    amount = '0';    // 40%概率无奖
+                    amount = '0';    // 70%概率无奖
                 }
                 
                 // 只有匹配中奖号码才能获得奖励
