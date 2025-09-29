@@ -269,36 +269,21 @@
                     let pointsText = "";
                     let color = "#f39c12";
                     
-                    // 新积分规则 - 适应降低的题目难度
-                    if (score <= 2) { 
-                        points = -20; 
-                        pointsText = "扣4加币"; 
+                    // 新积分规则 - 简化版
+                    if (score <= 4) { 
+                        points = -2; 
+                        pointsText = "扣2加币"; 
                         color = "#e74c3c"; 
                     }
-                    else if (score <= 4) { 
-                        points = -10; 
-                        pointsText = "扣2加币"; 
+                    else if (score <= 9) { 
+                        points = -1; 
+                        pointsText = "扣1加币"; 
                         color = "#e67e22"; 
                     }
-                    else if (score === 5) { 
-                        points = 0; 
-                        pointsText = "0加币"; 
-                        color = "#95a5a6"; 
-                    }
-                    else if (score <= 7) { 
-                        points = +10; 
-                        pointsText = "加2加币"; 
-                        color = "#3498db"; 
-                    }
-                    else if (score <= 9) { 
-                        points = +20; 
-                        pointsText = "加4加币"; 
-                        color = "#27ae60"; 
-                    }
                     else { 
-                        points = +30; 
-                        pointsText = "加6加币"; 
-                        color = "#2ecc71"; 
+                        points = +1; 
+                        pointsText = "加1加币"; 
+                        color = "#27ae60"; 
                     }
                     
                     resultDiv.innerHTML = `
@@ -310,7 +295,7 @@
                             </div>
                             <div style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 10px; color: #333;">
                                 <p><strong>积分规则：</strong></p>
-                                <p>0-2分扣4加币 | 3-4分扣2加币 | 5分0加币 | 6-7分加2加币 | 8-9分加4加币 | 10分以上加6加币</p>
+                                <p>0-4分扣2加币 | 5-9分扣1加币 | 10分以上加1加币</p>
                             </div>
                             <div style="margin-top: 30px;">
                                 <button onclick="location.reload()" style="margin: 10px; background: #3498db; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer;">再挑战一次</button>
